@@ -60,7 +60,7 @@ theme_set(new = theme_classic())
 
 #the tilda symbol below '~' signifies that tip is on the x-axis. So basically tilda(~) to the left of anything means that variable is on the x-axis. So here, local is also on the x-axis, but as color.
 #color = ~local only shows the outline, whereas, fill is used to color it inside as well
-#two variable are used here, tip and local. local is marries to color.
+#two variable are used here, tip and local. local is married to color.
 gf_bar(~tip, data = taxi_modified, fill = ~local,) %>%
   gf_labs(title = "Plot 1A: Counts of Tips")
 
