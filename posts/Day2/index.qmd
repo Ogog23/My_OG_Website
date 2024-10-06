@@ -1,0 +1,130 @@
+---
+title: "Day2-summarizing data"
+author: "Gayatri"
+---
+
+## Introduction
+
+This is day 2 of R-class. Today, I will be summarizing data:) on Friday morning:) First, i'll be working with mdg package
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(kableExtra)
+
+```
+
+## I will be looking at the new mpg dataset now
+
+```{r}
+mpg
+```
+
+```{r}
+mpg %>% head(8)
+```
+
+Manufacturer is a qual, model is qual, engine displacement(displ) is a quant since the values are not discrete, they are decimal values. I can also ask the
+
+```{r}
+summary(mpg)
+```
+
+```{r}
+mpg %>% dplyr::glimpse()
+```
+
+```{r}
+glimpse(mpg)
+```
+
+```{r}
+inspect(mpg)
+```
+
+```{r}
+skimr::skim(mpg)
+```
+
+Ordinal variable is called FACTOR.
+
+```{r}
+mpg_modified <- mpg %>%
+  dplyr::mutate(
+    cyl = as_factor(cyl),
+    fl = as_factor(fl),
+    drv = as_factor(drv),
+    class = as_factor(class),
+    trans = as_factor(trans)
+  )
+glimpse(mpg_modified)
+```
+
+# Let's try this with Babynames
+
+```{r}
+library(babynames)
+```
+
+```{r}
+glimpse(babynames)
+```
+
+```{r}
+skimr::skim(babynames)
+```
+
+```{r}
+babynames_modified <- babynames %>%
+  dplyr::mutate(
+    sex = as_factor(sex)
+  )
+glimpse(babynames_modified)
+```
+
+```{r}
+babynames_modified %>% slice_sample(n=30)
+```
+
+# Analysing math Anxiety data
+
+```{r}
+math_anxiety <- read_delim(file = "../../Data/MathAnxiety.csv", delim = ";")
+math_anxiety
+```
+
+```{r}
+glimpse(math_anxiety)
+```
+
+```{r}
+inspect(math_anxiety)
+```
+
+```{r}
+math_anxiety_modified <- math_anxiety %>%
+  dplyr::mutate(
+    Grade = as_factor(Grade)
+  )
+glimpse(math_anxiety_modified)
+```
+
+```{r}
+math_anxiety_modified %>%
+  group_by(Grade="Primary") %>%
+  summarize(average_Grade = mean(Grade), count = n())
+```
+
+```{r}
+math_anxiety_modified %>%
+  group_by(Gender) %>%
+  summarize(average_RCMAS = mean(RCMAS), count = n())
+```
+
+```{r}
+math_anxiety_modified %>%
+  group_by(Gender) %>%
+  summarize(average_AMAS = mean(AMAS), count = n())
+```

@@ -1,0 +1,54 @@
+---
+title: "My Name Is Gayatri and not Gayathri"
+author: "Gayatri J"
+---
+
+## Introduction
+
+#### This is a ridiculous class.
+
+kidding, i am damn excited about this class. Arvind is being annoying. There are hardly any switch boards in this class
+
+#### My First piece of R-code after a long time:)
+
+ i am damn tired  lol
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(ggformula)
+library(babynames)
+
+```
+
+```{r}
+babynames
+```
+
+```{r}
+babynames %>%  filter(name == "Gayatri")
+```
+
+```{r}
+babynames %>% filter(name== "Gayatri") %>% gf_line(n~ year)
+
+```
+
+Too many gayatri's were born in the US between 2005 and 2008:) And i wasn't one of them , I was born in Pune!
+
+```{r}
+babynames %>% filter(name== "Gayathri") %>% gf_line(n~ year)
+```
+
+```{r}
+babynames %>%  filter(name == "Gayatri"|name == "Gayathri")
+```
+
+```{r}
+babynames %>%
+  filter(name == "Gayatri" | name == "Gayathri") %>%
+  gf_bar(n ~ year, fill = ~ name)
+```
+
+![]()

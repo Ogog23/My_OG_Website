@@ -1,0 +1,165 @@
+---
+title: "Day3"
+author: "Gayatri Jadhav"
+---
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(kableExtra)
+library(skimr)
+```
+
+```{r}
+taxi <- read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/modeldata/taxi.csv")
+```
+
+```{r}
+glimpse(taxi)
+```
+
+```{r}
+skim(taxi)
+```
+
+```{r}
+inspect(taxi)
+```
+
+```{r}
+## Convert `dow`, `local`, and `month` into ordered factors
+taxi_modified <- taxi %>%
+  mutate(
+    dow = factor(dow,
+      levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+      labels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+      ordered = TRUE
+    ),
+    ##
+    local = factor(local,
+      levels = c("no", "yes"),
+      labels = c("no", "yes"),
+      ordered = TRUE
+    ),
+    ##
+    month = factor(month,
+      levels = c("Jan", "Feb", "Mar", "Apr"),
+      labels = c("Jan", "Feb", "Mar", "Apr"),
+      ordered = TRUE
+    )
+  )
+taxi_modified %>% glimpse()
+```
+
+```{r}
+## Set graph theme
+theme_set(new = theme_classic())
+##
+
+#the tilda symbol below '~' signifies that tip is on the x-axis. So basically tilda(~) to the left of anything means that variable is on the x-axis. So here, local is also on the x-axis, but as color.
+#color = ~local only shows the outline, whereas, fill is used to color it inside as well
+#two variable are used here, tip and local. local is marries to color.
+gf_bar(~tip, data = taxi_modified, fill = ~local,) %>%
+  gf_labs(title = "Plot 1A: Counts of Tips")
+
+
+    
+```
+
+```{r}
+
+## Set graph theme
+theme_set(new = theme_classic())
+##
+
+#position ="stack" is default
+gf_bar(~tip, data = taxi_modified, fill = ~local, position="dodge",) %>%
+  gf_labs(title = "Plot 1A: Counts of Tips")
+ 
+```
+
+```{r}
+## Set graph theme
+theme_set(new = theme_classic())
+##
+
+#Question-Do non-local people tip more than local people?
+
+## Showing "per capita" percentages
+## Better labelling of Y-axis
+taxi_modified %>%
+  gf_bar(~local,
+    fill = ~tip,
+    position = "fill"
+  ) %>%
+  gf_labs(
+    title = "Plot 2D: Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!"
+  )
+```
+
+```{r}
+## Set graph theme
+theme_set(new = theme_classic())
+#
+
+#Question-which company has the most non-tippers?
+## Showing "per capita" percentages
+## Better labelling of Y-axis
+taxi_modified %>%
+  gf_bar(~company, fill = ~tip, position = "fill") %>%
+  gf_labs(
+    title = "Plot 2D: Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!"
+  ) %>%
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))
+```
+
+```{r}
+## Set graph theme
+theme_set(new = theme_classic())
+
+#5pm is the busiest hour and 3pm the least.
+##
+gf_bar(~hour, fill = ~tip, data = taxi_modified) %>%
+  gf_labs(title = "Plot B: Counts of Tips by Hour")
+```
+
+```{r}
+## Set graph theme
+theme_set(new = theme_classic())
+
+#5pm is the busiest hour and 3pm the least.
+##
+gf_bar(~hour, fill = ~tip, data = taxi_modified, position = "fill") %>%
+  gf_labs(title = "Plot B: Counts of Tips by Hour")
+```
+
+```{r}
+##
+## This may be too busy a graph...
+gf_bar(~ dow | hour, fill = ~tip, data = taxi_modified, position = "fill") %>%
+  gf_labs(
+    title = "Plot F: Counts of Tips by Hour and Day of Week",
+    subtitle = "Is this plot arrangement easy to grasp?"
+  )
+```
+
+```{r}
+##
+## This may be too busy a graph...
+gf_bar(~hour, fill = ~tip, data = taxi_modified, position = "fill") %>%
+  gf_labs(
+    title = "Plot F: Counts of Tips by Hour and Day of Week",
+    subtitle = "Is this plot arrangement easy to grasp?"
+  )
+```
+
+# Dataset -2
+
+```{r}
+data(HELPrct)
+inspect(HELPrct)
+```
