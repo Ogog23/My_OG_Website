@@ -95,7 +95,7 @@ I'm randomly sampling 30 entries from the 'babynames_modified' dataset to get a 
 babynames_modified %>% slice_sample(n=30)
 ```
 
-### *My Turn - A1  *Analysing 'Math Anxiety Dataset':
+### *My Turn - A1* Analysing 'Math Anxiety Dataset':
 
 ```{r}
 math_anxiety <- read_delim(file = "../../Data/MathAnxiety.csv", delim = ";")

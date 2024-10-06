@@ -8,7 +8,7 @@
 
 <meta name="author" content="Gayatri Jadhav">
 
-<title>Day3 – My_OG_Website</title>
+<title>Day3 - Counts – My_OG_Website</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Day3</h1>
+      <h1 class="title">Day3 - Counts</h1>
                       </div>
   </div>
     
@@ -178,6 +178,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This is day 3 of R-class. Today, I will be understanding everything there is about counts. Random thought, I can count very well:) Ok, now I’ll create a setup chunk first.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -271,6 +274,8 @@ The following object is masked from 'package:mosaic':
     n_missing</code></pre>
 </div>
 </div>
+<section id="first-i-will-be-looking-at-the-taxi-dataset-after-reading-it-in" class="level4">
+<h4 class="anchored" data-anchor-id="first-i-will-be-looking-at-the-taxi-dataset-after-reading-it-in">First, I will be looking at the ‘taxi’ dataset after reading it in:</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>taxi <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://vincentarelbundock.github.io/Rdatasets/csv/modeldata/taxi.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -562,13 +567,14 @@ $ hour     &lt;dbl&gt; 16, 8, 18, 8, 21, 23, 12, 6, 12, 14, 18, 11, 12, 19, 17, 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Set graph theme</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="at">new =</span> <span class="fu">theme_classic</span>())</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">##theme_custom doesn't work for me:(</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#the tilda symbol below '~' signifies that tip is on the x-axis. So basically tilda(~) to the left of anything means that variable is on the x-axis. So here, local is also on the x-axis, but as color.</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#color = ~local only shows the outline, whereas, fill is used to color it inside as well</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#two variable are used here, tip and local. local is marries to color.</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span>tip, <span class="at">data =</span> taxi_modified, <span class="at">fill =</span> <span class="sc">~</span>local,) <span class="sc">%&gt;%</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Plot 1A: Counts of Tips"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#the tilda symbol below '~' signifies that tip is on the x-axis. So basically tilda(~) to the left of anything means that variable is on the x-axis. So here, local is also on the x-axis, but as color.</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#color = ~local only shows the outline, whereas, fill is used to color it inside as well</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#two variable are used here, tip and local. local is married to color.</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span>tip, <span class="at">data =</span> taxi_modified, <span class="at">fill =</span> <span class="sc">~</span>local,) <span class="sc">%&gt;%</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Plot 1A: Counts of Tips"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -706,8 +712,10 @@ $ hour     &lt;dbl&gt; 16, 8, 18, 8, 21, 23, 12, 6, 12, 14, 18, 11, 12, 19, 17, 
 </div>
 </div>
 </div>
-<section id="dataset--2" class="level1">
-<h1>Dataset -2</h1>
+</section>
+<section id="dataset--2---helprct" class="level4">
+<h4 class="anchored" data-anchor-id="dataset--2---helprct">Dataset -2 - HELPrct</h4>
+<p>I dropped my phone just now, and I think the display might have been broken. Wow, I might go bankrupt fixing it:) So i will take a break now.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(HELPrct)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>(HELPrct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -782,8 +790,143 @@ quantitative variables:
 21   3.0596026   6.1875894 453       0</code></pre>
 </div>
 </div>
+</section>
+<section id="my-turn---a1-calm-mode-data-analysis-datset-3---i-will-be-analysing-stigler-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="my-turn---a1-calm-mode-data-analysis-datset-3---i-will-be-analysing-stigler-dataset"><em>My Turn - A1 (</em>Calm Mode Data Analysis)* Datset 3 -* I will be analysing ‘Stigler’ Dataset :</h3>
+<section id="purpose-to-calculate-an-optimal-diet" class="level4">
+<h4 class="anchored" data-anchor-id="purpose-to-calculate-an-optimal-diet">Purpose: To Calculate An Optimal Diet</h4>
+<p>This is a dataset that contains nutritional values of household commodities. The dataset was used in the “stigler”-problem where ones tries to figure out how to minimize the costs of food while still getting enough nutrients.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>stig <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">"../../Data/stigler.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stig)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "commodity"     "unit"          "price_cents"   "calories"     
+ [5] "protein_g"     "calcium_g"     "iron_mg"       "vitamin_a_iu" 
+ [9] "vitamin_b1_mg" "vitamin_b2_mg" "niacin_mg"     "vitamin_c_mg" </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stig)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                commodity   unit price_cents calories protein_g calcium_g
+1  Wheat Flour (Enriched) 10 lb.        36.0     44.7      1411       2.0
+2                Macaroni  1 lb.        14.1     11.6       418       0.7
+3 Wheat Cereal (Enriched) 28 oz.        24.2     11.8       377      14.4
+4             Corn Flakes  8 oz.         7.1     11.4       252       0.1
+5               Corn Meal  1 lb.         4.6     36.0       897       1.7
+6            Hominy Grits 24 oz.         8.5     28.6       680       0.8
+  iron_mg vitamin_a_iu vitamin_b1_mg vitamin_b2_mg niacin_mg vitamin_c_mg
+1     365          0.0          55.4          33.3       441            0
+2      54          0.0           3.2           1.9        68            0
+3     175          0.0          14.4           8.8       114            0
+4      56          0.0          13.5           2.3        68            0
+5      99         30.9          17.4           7.9       106            0
+6      80          0.0          10.6           1.6       110            0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(stig)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              commodity   unit price_cents calories protein_g calcium_g iron_mg
+72                Cocoa  8 oz.         8.6      8.7       237       3.0      72
+73            Chocolate  8 oz.        16.2      8.0        77       1.3      39
+74                Sugar 10 lb.        51.7     34.9         0       0.0       0
+75           Corn Syrup 24 oz.        13.7     14.7         0       0.5      74
+76             Molasses 18 oz.        13.6      9.0         0      10.3     244
+77 Strawberry Preserves  1 lb.        20.5      6.4        11       0.4       7
+   vitamin_a_iu vitamin_b1_mg vitamin_b2_mg niacin_mg vitamin_c_mg
+72          0.0           2.0          11.9        40            0
+73          0.0           0.9           3.4        14            0
+74          0.0           0.0           0.0         0            0
+75          0.0           0.0           0.0         5            0
+76          0.0           1.9           7.5       146            0
+77          0.2           0.2           0.4         3            0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(stig)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  commodity             unit            price_cents      calories     
+ Length:77          Length:77          Min.   : 3.6   Min.   : 0.000  
+ Class :character   Class :character   1st Qu.: 8.2   1st Qu.: 2.700  
+ Mode  :character   Mode  :character   Median :14.6   Median : 6.700  
+                                       Mean   :17.3   Mean   : 9.632  
+                                       3rd Qu.:24.8   3rd Qu.:12.500  
+                                       Max.   :51.7   Max.   :44.700  
+   protein_g        calcium_g        iron_mg       vitamin_a_iu   
+ Min.   :   0.0   Min.   : 0.00   Min.   :  0.0   Min.   :  0.00  
+ 1st Qu.:  49.0   1st Qu.: 0.20   1st Qu.: 18.0   1st Qu.:  0.00  
+ Median : 152.0   Median : 0.60   Median : 38.0   Median :  0.80  
+ Mean   : 264.7   Mean   : 2.14   Mean   : 77.3   Mean   : 32.73  
+ 3rd Qu.: 336.0   3rd Qu.: 2.50   3rd Qu.: 80.0   3rd Qu.: 18.60  
+ Max.   :1691.0   Max.   :16.40   Max.   :792.0   Max.   :918.40  
+ vitamin_b1_mg   vitamin_b2_mg      niacin_mg       vitamin_c_mg   
+ Min.   : 0.00   Min.   : 0.000   Min.   :  0.00   Min.   :   0.0  
+ 1st Qu.: 1.00   1st Qu.: 1.800   1st Qu.:  7.00   1st Qu.:   0.0  
+ Median : 2.80   Median : 3.000   Median : 42.00   Median :   0.0  
+ Mean   : 6.61   Mean   : 5.938   Mean   : 65.29   Mean   : 328.9  
+ 3rd Qu.: 8.30   3rd Qu.: 6.400   3rd Qu.: 79.00   3rd Qu.: 272.0  
+ Max.   :55.40   Max.   :50.800   Max.   :471.00   Max.   :5369.0  </code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="graph-1" class="level2">
+<h2 class="anchored" data-anchor-id="graph-1">Graph 1</h2>
+<section id="quantitative-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="quantitative-analysis">Quantitative Analysis</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> stig, (<span class="fu">aes</span>(<span class="at">x =</span> calcium_g, <span class="at">fill =</span> <span class="st">"pink"</span>))) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"A bar geom with cut"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="graph-2" class="level2">
+<h2 class="anchored" data-anchor-id="graph-2">Graph 2</h2>
+<section id="quantity-vs-quantity" class="level3">
+<h3 class="anchored" data-anchor-id="quantity-vs-quantity">Quantity Vs Quantity</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> stig, <span class="fu">aes</span>(<span class="at">x =</span> price_cents, <span class="at">y =</span> niacin_mg)) <span class="sc">+</span> <span class="fu">geom_jitter</span>(<span class="at">color =</span> <span class="st">"magenta"</span>) <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"A point geom with jittered data points"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="graph-3" class="level2">
+<h2 class="anchored" data-anchor-id="graph-3">Graph 3</h2>
+<section id="quantity-vs-quantity-1" class="level3">
+<h3 class="anchored" data-anchor-id="quantity-vs-quantity-1">Quantity Vs Quantity</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> stig, <span class="fu">aes</span>(<span class="at">x =</span> price_cents, <span class="at">y =</span> calories)) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="at">label =</span> <span class="st">"A line graph"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p># <strong>End of A1</strong></p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
