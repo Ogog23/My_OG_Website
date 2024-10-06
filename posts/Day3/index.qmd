@@ -1,7 +1,12 @@
 ---
-title: "Day3"
+title: "Day3 - Counts"
 author: "Gayatri Jadhav"
+prof: "Arvind Venkatadri"
 ---
+
+## Introduction
+
+This is day 3 of R-class. Today, I will be understanding everything there is about counts. Random thought, I can count very well:) Ok, now I'll create a setup chunk first.
 
 ```{r}
 #| label: setup
@@ -11,6 +16,8 @@ library(mosaic)
 library(kableExtra)
 library(skimr)
 ```
+
+#### First, I will be looking at the 'taxi' dataset after reading it in:
 
 ```{r}
 taxi <- read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/modeldata/taxi.csv")
@@ -56,7 +63,8 @@ taxi_modified %>% glimpse()
 ```{r}
 ## Set graph theme
 theme_set(new = theme_classic())
-##
+##theme_custom doesn't work for me:(
+
 
 #the tilda symbol below '~' signifies that tip is on the x-axis. So basically tilda(~) to the left of anything means that variable is on the x-axis. So here, local is also on the x-axis, but as color.
 #color = ~local only shows the outline, whereas, fill is used to color it inside as well
@@ -157,9 +165,64 @@ gf_bar(~hour, fill = ~tip, data = taxi_modified, position = "fill") %>%
   )
 ```
 
-# Dataset -2
+#### Dataset -2 - HELPrct
+
+I dropped my phone just now, and I think the display might have been broken. Wow, I might go bankrupt fixing it:) So i will take a break now.
 
 ```{r}
 data(HELPrct)
 inspect(HELPrct)
 ```
+
+### *My Turn - A1 (*Calm Mode Data Analysis)\* Datset 3 -\* I will be analysing 'Stigler' Dataset :
+
+#### Purpose: To Calculate An Optimal Diet
+
+This is a dataset that contains nutritional values of household commodities. The dataset was used in the "stigler"-problem where ones tries to figure out how to minimize the costs of food while still getting enough nutrients.
+
+```{r read stig}
+stig <- read.csv(file = "../../Data/stigler.csv")
+```
+
+```{r}
+names(stig)
+```
+
+```{r}
+head(stig)
+
+```
+
+```{r}
+tail(stig)
+```
+
+```{r}
+summary(stig)
+```
+
+## Graph 1
+
+### Quantitative Analysis
+
+```{r}
+ggplot(data = stig, (aes(x = calcium_g, fill = "pink"))) + geom_bar(color = "black") + ggtitle("A bar geom with cut")
+```
+
+## Graph 2
+
+### Quantity Vs Quantity
+
+```{r}
+ggplot(data = stig, aes(x = price_cents, y = niacin_mg)) + geom_jitter(color = "magenta") + geom_smooth(method = lm) + ggtitle("A point geom with jittered data points")
+```
+
+## Graph 3
+
+### Quantity Vs Quantity
+
+```{r}
+ggplot(data = stig, aes(x = price_cents, y = calories)) + geom_line(color = "red") + ggtitle(label = "A line graph")
+```
+
+\# **End of A1**

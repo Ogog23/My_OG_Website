@@ -1,11 +1,12 @@
 ---
-title: "Day2-summarizing data"
-author: "Gayatri"
+title: "Day2 - Summarizing Data"
+author: "Gayatri Jadhav"
+prof: "Arvind Venkatadri"
 ---
 
 ## Introduction
 
-This is day 2 of R-class. Today, I will be summarizing data:) on Friday morning:) First, i'll be working with mdg package
+This is day 2 of R-class. Today, I will be summarizing data:) on a Friday morning:) First, i'll be working with mdg package.
 
 ```{r}
 #| label: setup
@@ -16,7 +17,7 @@ library(kableExtra)
 
 ```
 
-## I will be looking at the new mpg dataset now
+#### I will be looking at the new 'mpg' dataset now :
 
 ```{r}
 mpg
@@ -24,9 +25,10 @@ mpg
 
 ```{r}
 mpg %>% head(8)
+#head(8) shows the first 8 rows
 ```
 
-Manufacturer is a qual, model is qual, engine displacement(displ) is a quant since the values are not discrete, they are decimal values. I can also ask the
+Manufacturer is a qual, model is qual, engine displacement(displ) is a quant since the values are not discrete, they are decimal values. -
 
 ```{r}
 summary(mpg)
@@ -48,7 +50,8 @@ inspect(mpg)
 skimr::skim(mpg)
 ```
 
-Ordinal variable is called FACTOR.
+Ordinal variable is called FACTOR.\
+Mutating as factor is converting any datatype to a factor.
 
 ```{r}
 mpg_modified <- mpg %>%
@@ -62,7 +65,7 @@ mpg_modified <- mpg %>%
 glimpse(mpg_modified)
 ```
 
-# Let's try this with Babynames
+#### Let's try this with 'babynames' :
 
 ```{r}
 library(babynames)
@@ -76,6 +79,8 @@ glimpse(babynames)
 skimr::skim(babynames)
 ```
 
+I want to convert the 'sex' column from character to factor so that I can categorize the values for easier analysis-
+
 ```{r}
 babynames_modified <- babynames %>%
   dplyr::mutate(
@@ -84,11 +89,13 @@ babynames_modified <- babynames %>%
 glimpse(babynames_modified)
 ```
 
+I'm randomly sampling 30 entries from the 'babynames_modified' dataset to get a quick look at some of the data.
+
 ```{r}
 babynames_modified %>% slice_sample(n=30)
 ```
 
-# Analysing math Anxiety data
+### *My Turn - A1  *Analysing 'Math Anxiety Dataset':
 
 ```{r}
 math_anxiety <- read_delim(file = "../../Data/MathAnxiety.csv", delim = ";")
@@ -103,6 +110,8 @@ glimpse(math_anxiety)
 inspect(math_anxiety)
 ```
 
+I'm converting the 'Grade' column to a factor in the 'math_anxiety' dataset to make it easier to analyze the data by grade level, and then I'm taking a quick look at the modified dataset with glimpse-
+
 ```{r}
 math_anxiety_modified <- math_anxiety %>%
   dplyr::mutate(
@@ -111,11 +120,15 @@ math_anxiety_modified <- math_anxiety %>%
 glimpse(math_anxiety_modified)
 ```
 
+I'm grouping the 'math_anxiety_modified' dataset by Primary Grade and calculating the average grade and count of entries in that group-
+
 ```{r}
 math_anxiety_modified %>%
   group_by(Grade="Primary") %>%
   summarize(average_Grade = mean(Grade), count = n())
 ```
+
+I'm grouping the data by gender and calculating the average AMAS score for boys and girls. Boys have an average score of about 21.17 with 323 entries, while girls have an average score of about 22.93 with 276 entries.
 
 ```{r}
 math_anxiety_modified %>%
@@ -123,8 +136,14 @@ math_anxiety_modified %>%
   summarize(average_RCMAS = mean(RCMAS), count = n())
 ```
 
+I'm grouping the data by gender to find the average AMAS score. Boys have an average score of about 21.17 based on 323 entries, while girls have a higher average score of about 22.93 from 276 entries.
+
 ```{r}
 math_anxiety_modified %>%
   group_by(Gender) %>%
   summarize(average_AMAS = mean(AMAS), count = n())
 ```
+
+Conclusion: These stats helped me see how boys and girls differed in math anxiety levels and how their scores changed within each group.
+
+*Can't wait for tomorrow :D*
