@@ -1,0 +1,233 @@
+---
+title: "Day 5 - Groups, Change"
+author: "Gayatri Jadhav"
+---
+
+## Introduction
+
+This is day 5 of R-class. Today, I will be exploring Groups. I will understand how boxplots work.
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(kableExtra)
+library(skimr)
+```
+
+```{r}
+wages <- read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/stevedata/gss_wages.csv")
+
+glimpse(wages)
+```
+
+```{r}
+skim(wages)
+```
+
+```{r}
+inspect(wages)
+```
+
+```{r}
+wages_clean <-
+  wages %>%
+  tidyr::drop_na(realrinc) 
+
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+#
+wages_clean %>%
+  gf_boxplot(realrinc ~ "Income") %>% # Dummy X-axis "variable"
+  gf_labs(
+    title = "Plot 1A: Income has a skewed distribution",
+    subtitle = "Many outliers on the high side"
+  )
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+#
+wages_clean %>%
+  gf_boxplot(gender ~realrinc ) %>%
+  gf_labs(title = "Plot 2A: Income by Gender")
+
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+##
+wages_clean %>%
+  gf_boxplot(gender ~ log10(realrinc)) %>%
+  gf_labs(title = "Plot 2B: Log(Income) by Gender")
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+#
+wages_clean %>%
+  gf_boxplot(wrkstat ~realrinc ) %>%
+  gf_labs(title = "Plot 2A: Income by Work Status")
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+##
+wages_clean %>%
+  gf_boxplot(educcat ~ log10(realrinc)) %>%
+  gf_labs(title = "Plot 2B: Log(Income) by Gender")
+```
+
+```{r}
+wages_clean <-
+  wages %>%
+  tidyr::drop_na(educcat) 
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+#
+wages_clean %>%
+  gf_boxplot(educcat ~realrinc ) %>%
+  gf_labs(title = "Plot 2A: Income by Work Status")
+```
+
+**Why use log income instead of income?(google search)**
+
+When dealing with income level or economic value, the numbers are generally large. **The log has the effect of de-scaling effect of the large number for ease of handling**. After the calculation or modeling is complete, the final result can be converted back to its original scale.
+
+Quant vs quant
+
+```{r}
+
+library(GGally) # Corr plots
+library(corrplot) # More corrplots
+library(ggExtra) # Making Combination Plots
+
+# devtools::install_github("rpruim/Lock5withR")
+library(Lock5withR) # Datasets
+library(palmerpenguins) # A famous dataset
+
+library(easystats) # Easy Statistical Analysis and Charts
+library(correlation) # Different Types of Correlations
+# From the easystats collection of packages
+```
+
+```{r}
+HollywoodMovies2011 -> movies
+
+movies_quant <- movies %>%
+  drop_na() %>%
+  select(where(is.numeric))
+glimpse(movies_quant)
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+
+movies %>%
+  gf_point(DomesticGross ~ WorldGross) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movie Gross Earnings: Domestics vs World"
+  )
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+movies %>%
+  gf_point(Profitability ~ OpeningWeekend) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movies: Does Opening Week Earnings indicate Profitability?"
+  )
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+movies %>%
+  gf_point(Profitability ~ AudienceScore) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Does the Audience Score affect the Profitability?"
+    
+    #No, it is not affecting the profitability as the slope is 0.
+  )
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+
+##Rotten tomatoes is website that rates movies
+movies %>%
+  gf_point(RottenTomatoes ~ AudienceScore) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movie Ratings: Tomatoes vs Audience"
+  )
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+
+movies %>%
+  drop_na() %>%
+  gf_point(RottenTomatoes ~ AudienceScore,
+    color = ~Genre
+  ) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movie Ratings: Trends by Genre"
+  )
+```
+
+#Best fit line
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+
+# names(movies_quant)
+
+GGally::ggpairs(
+  movies %>% drop_na(),
+  # Select Quant variables only for now
+  columns = c(
+    "RottenTomatoes", "AudienceScore", "DomesticGross", "ForeignGross" ,"Budget", "Profitability"
+  ),
+  switch = "both",
+  # axis labels in more traditional locations(left and bottom)
+
+  progress = FALSE,
+  # no compute progress messages needed
+
+  # Choose the diagonal graphs (always single variable! Think!)
+  diag = list(continuous = "barDiag"),
+  # choosing histogram,not density
+
+  # Choose lower triangle graphs, two-variable graphs
+  lower = list(continuous = wrap("smooth", alpha = 0.3, se = FALSE)),
+  title = "Movies Data Correlations Plot #1"
+)
+```
+
+#A2- what can be the target variables, what might have been the research behind this dataset, make graphs and ask what question does this graph answer. It is okay if i wanted to ask smtg but it reveals smtg else. Define data dictionary.Make 3 files. A2-A (index.qmd), A2-B(index.qmd), A2-C (index.qmd).Choose any 3 datasets from the link uploaded.

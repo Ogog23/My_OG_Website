@@ -1,0 +1,76 @@
+---
+title: "Day-6"
+author: "Gayatri Jadhav"
+---
+
+population - parameters
+
+sample - statistics
+
+sample mean and population mean
+
+sample mean is equally likely to be on either side. (it is fair)
+
+any mean can be positive or negative
+
+whereas, sd(standard deviation0 can never be negative
+
+the mean of the sample mean is the population mean
+
+Bell curve
+
+Should the conference interval be big or smaller? (answer is smaller) So we are sure -95 % , so we have to trust the sample mean
+
+The lady who drank tea story - if those same tea-cups were reshuffled and given
+
+rng - random number generation poisson distribution
+
+Statistical Inference ---\> Samples, Populations, Statistics and Inference
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(ggformula)
+library(infer)
+library(broom) # Clean test results in tibble form
+library(resampledata) # Datasets from Chihara and Hesterberg's book
+library(openintro) # More datasets
+```
+
+```{r}
+
+set.seed(40)  # for repldata:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAaCAYAAADFTB7LAAAAcElEQVR4Xu3OwQmAQAxE0bClWYCW5N06tM6V2YPg5CjoF/JhLoHAi6iqn9eOefUbqrYvHY0cQDLyAlKRNyARmYA0ZMLRkAlGQyaU72tkAtlim7r/vJqDUDjlKBROOQyFU2icQuMUGqfQuBEaV1XPOwEx96nYACK8+wAAAABJRU5ErkJggg==ication
+# Data as individual vectors ( for t.tests etc)
+y <- rnorm(50, mean = 2, sd = 2)
+
+# And as tibble too
+mydata <- tibble(y = y)
+mydata
+
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+#
+mydata %>%
+    gf_density(~y) %>%
+    gf_fitdistr(dist = "dnorm") %>%
+    gf_labs(title = "Densities of Original Data Variables", subtitle = "Compared with Normal Density")
+```
+
+```{r}
+
+# t-test
+t1 <- mosaic::t_test(
+          y, # Name of variable
+          mu = 0, # belief of population mean
+          alternative = "two.sided") %>% # Check both sides
+  
+  broom::tidy() # Make results presentable, and plottable!!
+t1
+```
+
+
+#| eval: false
+Use this if you don't want the chunk to run

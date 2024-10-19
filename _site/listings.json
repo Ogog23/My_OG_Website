@@ -2,8 +2,14 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/A2-part1/index.html",
+      "/posts/A2-part2/index.html",
+      "/posts/A2-part3/index.html",
       "/posts/Day2/index.html",
       "/posts/Day3/index.html",
+      "/posts/Day5/index.html",
+      "/posts/Day5/index.html",
+      "/posts/Day6/index.html",
       "/posts/My-name-is-gaytree/index.html",
       "/posts/post-with-code/index.html",
       "/posts/welcome/index.html"
