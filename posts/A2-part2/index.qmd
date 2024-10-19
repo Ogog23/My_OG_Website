@@ -2,3 +2,81 @@
 title: "A2- Movie Profits"
 author: "Gayatri Jadhav"
 ---
+
+## Introduction
+
+This is a dataset pertaining to movies and genres, modified for ease of analysis and plotting.
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+```
+
+```{r}
+movieprofits <- read_delim("../../Data/movie_profit.csv", delim = ";")
+glimpse(movieprofits)
+```
+
+```{r}
+skim(movieprofits)
+```
+
+```{r}
+inspect(movieprofits)
+```
+
+```{r}
+movieprofits <- movieprofits %>%
+  drop_na() %>% mutate(across(everything(), ~ as.character(.)))  # Convert all columns to character type. This was not taught in class, I looked it up.
+
+glimpse(movieprofits)
+```
+
+```{r}
+inspect(movieprofits)
+```
+
+```{r}
+skim(movieprofits)
+```
+
+```{r}
+movieprofits
+```
+
+Replicating the graph.
+
+```{r}
+# Creating a profit ratio column
+movieprofits <- movieprofits %>%
+  mutate(profit_ratio = as.numeric(profit_ratio) / as.numeric(production_budget))  # Replace with actual column names
+
+# Grouping by genre and distributor to calculate median profit ratio
+median_profit_data <- movieprofits %>%
+  group_by(genre, distributor) %>%
+  summarise(median_profit_ratio = median(profit_ratio, na.rm = TRUE)) %>%  # Calculate median
+  ungroup()  # Ungroup after summarizing
+
+glimpse(median_profit_data)
+```
+
+\
+
+```{r}
+# Set graph theme
+theme_set(theme_classic())
+
+# Creating the plot using the summarized data
+ggplot(median_profit_data, aes(x = median_profit_ratio, y = genre)) + geom_col() + facet_wrap(~ distributor, nrow = 2, scales = "free_x") +
+  labs(title = "Profits Made by Film Distributors",
+       subtitle = "Ratio of Profits to Budgets",
+       x = "Median Profit Ratio",
+       y = "Genre") 
+
+
+
+```
+
+\

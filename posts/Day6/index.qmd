@@ -71,6 +71,4 @@ t1 <- mosaic::t_test(
 t1
 ```
 
-
-#| eval: false
-Use this if you don't want the chunk to run
+#\| eval: false Use this if you don't want the chunk to run

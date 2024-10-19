@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -144,8 +178,672 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This is a dataset pertaining to movies and genres, modified for ease of analysis and plotting.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'mosaic':
+  method                           from   
+  fortify.SpatialPolygonsDataFrame ggplot2
+
+The 'mosaic' package masks several functions from core packages in order to add 
+additional features.  The original behavior of these functions should not be affected by this.
+
+Attaching package: 'mosaic'
+
+The following object is masked from 'package:Matrix':
+
+    mean
+
+The following objects are masked from 'package:dplyr':
+
+    count, do, tally
+
+The following object is masked from 'package:purrr':
+
+    cross
+
+The following object is masked from 'package:ggplot2':
+
+    stat
+
+The following objects are masked from 'package:stats':
+
+    binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
+    quantile, sd, t.test, var
+
+The following objects are masked from 'package:base':
+
+    max, mean, min, prod, range, sample, sum</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'skimr'
+
+The following object is masked from 'package:mosaic':
+
+    n_missing</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>movieprofits <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"../../Data/movie_profit.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 3310 Columns: 10
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ";"
+chr  (4): movie, distributor, mpaa_rating, genre
+dbl  (4): production_budget, domestic_gross, worldwide_gross, decade
+num  (1): profit_ratio
+date (1): release_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,310
+Columns: 10
+$ release_date      &lt;date&gt; 2005-07-22, 1998-08-28, 1997-03-28, 2000-07-14, 201…
+$ movie             &lt;chr&gt; "November", "I Married a Strange Person", "Love and …
+$ production_budget &lt;dbl&gt; 250000, 250000, 250000, 250000, 250000, 250000, 2500…
+$ domestic_gross    &lt;dbl&gt; 191862, 203134, 212285, 1055671, 3395391, 3802390, 3…
+$ worldwide_gross   &lt;dbl&gt; 191862, 203134, 743216, 1157672, 3728400, 3809226, 3…
+$ distributor       &lt;chr&gt; "Other", "Other", "Other", "Other", "Paramount&nbsp;Pictu…
+$ mpaa_rating       &lt;chr&gt; "R", NA, "R", "R", "PG-13", "R", "R", "R", "R", "R",…
+$ genre             &lt;chr&gt; "Drama", "Comedy", "Comedy", "Drama", "Drama", "Dram…
+$ profit_ratio      &lt;dbl&gt; 7.674480e+13, 8.125360e+13, 2.972864e+14, 4.630688e+…
+$ decade            &lt;dbl&gt; 2000, 1990, 1990, 2000, 2010, 2000, 2010, 2000, 2010…</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">movieprofits</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">3310</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Date</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">movie</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3310</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">distributor</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">mpaa_rating</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">genre</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: Date</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">min</th>
+<th style="text-align: left;">max</th>
+<th style="text-align: left;">median</th>
+<th style="text-align: right;">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">release_date</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1936-02-05</td>
+<td style="text-align: left;">2017-12-22</td>
+<td style="text-align: left;">2005-06-30</td>
+<td style="text-align: right;">1723</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">production_budget</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.326794e+07</td>
+<td style="text-align: right;">3.460741e+07</td>
+<td style="text-align: right;">2.50e+05</td>
+<td style="text-align: right;">9.500000e+06</td>
+<td style="text-align: right;">2.000000e+07</td>
+<td style="text-align: right;">4.500000e+07</td>
+<td style="text-align: right;">1.750000e+08</td>
+<td style="text-align: left;">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">domestic_gross</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.551509e+07</td>
+<td style="text-align: right;">5.852794e+07</td>
+<td style="text-align: right;">0.00e+00</td>
+<td style="text-align: right;">6.530094e+06</td>
+<td style="text-align: right;">2.558731e+07</td>
+<td style="text-align: right;">6.046695e+07</td>
+<td style="text-align: right;">4.745447e+08</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">worldwide_gross</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.384123e+07</td>
+<td style="text-align: right;">1.389514e+08</td>
+<td style="text-align: right;">4.23e+02</td>
+<td style="text-align: right;">1.086144e+07</td>
+<td style="text-align: right;">4.040903e+07</td>
+<td style="text-align: right;">1.184703e+08</td>
+<td style="text-align: right;">1.162782e+09</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">profit_ratio</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.319388e+14</td>
+<td style="text-align: right;">1.501736e+15</td>
+<td style="text-align: right;">1.38e+10</td>
+<td style="text-align: right;">7.861269e+13</td>
+<td style="text-align: right;">1.962499e+14</td>
+<td style="text-align: right;">3.942158e+14</td>
+<td style="text-align: right;">4.315179e+16</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">decade</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.998790e+03</td>
+<td style="text-align: right;">1.061000e+01</td>
+<td style="text-align: right;">1.93e+03</td>
+<td style="text-align: right;">1.990000e+03</td>
+<td style="text-align: right;">2.000000e+03</td>
+<td style="text-align: right;">2.010000e+03</td>
+<td style="text-align: right;">2.010000e+03</td>
+<td style="text-align: left;">▁▁▁▃▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+categorical variables:  
+         name     class levels    n missing
+1       movie character   3310 3310       0
+2 distributor character      6 3268      42
+3 mpaa_rating character      4 3180     130
+4       genre character      5 3310       0
+                                   distribution
+1 10 Days in a Madhouse (0%) ...               
+2  Other (53.2%), Warner&nbsp;Bros. (11%) ...       
+3 R (46.4%), PG-13 (33.5%), PG (17.4%) ...     
+4 Drama (36.5%), Comedy (24.1%) ...            
+
+Date variables:  
+          name class      first       last min_diff  max_diff    n missing
+1 release_date  Date 1936-02-05 2017-12-22   0 days 2592 days 3310       0
+
+quantitative variables:  
+               name   class      min           Q1       median           Q3
+1 production_budget numeric 2.50e+05 9.500000e+06 2.000000e+07 4.500000e+07
+2    domestic_gross numeric 0.00e+00 6.530094e+06 2.558731e+07 6.046695e+07
+3   worldwide_gross numeric 4.23e+02 1.086144e+07 4.040903e+07 1.184703e+08
+4      profit_ratio numeric 1.38e+10 7.861269e+13 1.962499e+14 3.942158e+14
+5            decade numeric 1.93e+03 1.990000e+03 2.000000e+03 2.010000e+03
+           max         mean           sd    n missing
+1 1.750000e+08 3.326794e+07 3.460741e+07 3310       0
+2 4.745447e+08 4.551509e+07 5.852794e+07 3310       0
+3 1.162782e+09 9.384123e+07 1.389514e+08 3310       0
+4 4.315179e+16 4.319388e+14 1.501736e+15 3310       0
+5 2.010000e+03 1.998785e+03 1.061308e+01 3310       0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>movieprofits <span class="ot">&lt;-</span> movieprofits <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">as.character</span>(.)))  <span class="co"># Convert all columns to character type. This was not taught in class, I looked it up.</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,150
+Columns: 10
+$ release_date      &lt;chr&gt; "2005-07-22", "1997-03-28", "2000-07-14", "2011-10-2…
+$ movie             &lt;chr&gt; "November", "Love and Other Catastrophes", "Chuck&amp;Bu…
+$ production_budget &lt;chr&gt; "250000", "250000", "250000", "250000", "250000", "2…
+$ domestic_gross    &lt;chr&gt; "191862", "212285", "1055671", "3395391", "3802390",…
+$ worldwide_gross   &lt;chr&gt; "191862", "743216", "1157672", "3728400", "3809226",…
+$ distributor       &lt;chr&gt; "Other", "Other", "Other", "Paramount&nbsp;Pictures", "Pa…
+$ mpaa_rating       &lt;chr&gt; "R", "R", "R", "PG-13", "R", "R", "R", "R", "R", "R"…
+$ genre             &lt;chr&gt; "Drama", "Comedy", "Drama", "Drama", "Drama", "Actio…
+$ profit_ratio      &lt;chr&gt; "7.67448e+13", "2.972864e+14", "4.630688e+14", "1.49…
+$ decade            &lt;chr&gt; "2000", "1990", "2000", "2010", "2000", "2010", "200…</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+categorical variables:  
+                name     class levels    n missing
+1       release_date character   1613 3150       0
+2              movie character   3150 3150       0
+3  production_budget character    297 3150       0
+4     domestic_gross character   3127 3150       0
+5    worldwide_gross character   3147 3150       0
+6        distributor character      6 3150       0
+7        mpaa_rating character      4 3150       0
+8              genre character      5 3150       0
+9       profit_ratio character   3149 3150       0
+10            decade character      9 3150       0
+                                    distribution
+1  2000-12-22 (0.3%), 2005-09-30 (0.2%) ...     
+2  10 Days in a Madhouse (0%) ...               
+3  2e+07 (4.7%), 1e+07 (4.2%) ...               
+4  0 (0.7%), 5e+07 (0.1%) ...                   
+5  12900000 (0.1%), 191200000 (0.1%) ...        
+6   Other (53.3%), Warner&nbsp;Bros. (11.1%) ...     
+7  R (46.2%), PG-13 (33.7%), PG (17.4%) ...     
+8  Drama (36.8%), Comedy (24.2%) ...            
+9  5e+14 (0.1%), 1.00109022e+14 (0%) ...        
+10 2000 (43.7%), 2010 (31.3%) ...               </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">movieprofits</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">3150</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 11%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">release_date</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1613</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">movie</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3150</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">production_budget</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">297</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">domestic_gross</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3127</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">worldwide_gross</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3147</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">distributor</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">mpaa_rating</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">genre</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">profit_ratio</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3149</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">decade</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>movieprofits</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3,150 × 10
+   release_date movie           production_budget domestic_gross worldwide_gross
+   &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;             &lt;chr&gt;          &lt;chr&gt;          
+ 1 2005-07-22   November        250000            191862         191862         
+ 2 1997-03-28   Love and Other… 250000            212285         743216         
+ 3 2000-07-14   Chuck&amp;Buck      250000            1055671        1157672        
+ 4 2011-10-28   Like Crazy      250000            3395391        3728400        
+ 5 2003-04-11   Better Luck To… 250000            3802390        3809226        
+ 6 2017-04-28   Sleight         250000            3930990        3934450        
+ 7 2002-06-28   Lovely and Ama… 250000            4210379        4613482        
+ 8 2012-08-17   Compliance      270000            319285         830700         
+ 9 2005-05-06   Fighting Tommy… 3e+05             10514          10514          
+10 1998-08-07   First Love, La… 3e+05             10876          10876          
+# ℹ 3,140 more rows
+# ℹ 5 more variables: distributor &lt;chr&gt;, mpaa_rating &lt;chr&gt;, genre &lt;chr&gt;,
+#   profit_ratio &lt;chr&gt;, decade &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p>Replicating the graph.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a profit ratio column</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>movieprofits <span class="ot">&lt;-</span> movieprofits <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">profit_ratio =</span> <span class="fu">as.numeric</span>(profit_ratio) <span class="sc">/</span> <span class="fu">as.numeric</span>(production_budget))  <span class="co"># Replace with actual column names</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouping by genre and distributor to calculate median profit ratio</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>median_profit_data <span class="ot">&lt;-</span> movieprofits <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre, distributor) <span class="sc">%&gt;%</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_profit_ratio =</span> <span class="fu">median</span>(profit_ratio, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span>  <span class="co"># Calculate median</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="co"># Ungroup after summarizing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'genre'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(median_profit_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 30
+Columns: 3
+$ genre               &lt;chr&gt; "Action", "Action", "Action", "Action", "Action", …
+$ distributor         &lt;chr&gt; "20th&nbsp;Century&nbsp;Fox", "Other", "Paramount&nbsp;Pictures",…
+$ median_profit_ratio &lt;dbl&gt; 4326662, 4289208, 3566068, 3356647, 3560683, 23373…</code></pre>
+</div>
+</div>
+<p><br>
+</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set graph theme</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the plot using the summarized data</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(median_profit_data, <span class="fu">aes</span>(<span class="at">x =</span> median_profit_ratio, <span class="at">y =</span> genre)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span> distributor, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">"free_x"</span>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Profits Made by Film Distributors"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Ratio of Profits to Budgets"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Median Profit Ratio"</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Genre"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><br>
+</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
