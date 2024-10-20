@@ -16,7 +16,9 @@ library(ggformula)
 ```
 
 ```{r}
+#Reading in te dataset
 movieprofits <- read_delim("../../Data/movie_profit.csv", delim = ";")
+
 glimpse(movieprofits)
 ```
 
@@ -28,9 +30,47 @@ skim(movieprofits)
 inspect(movieprofits)
 ```
 
+## Data Dictionary
+
+::: callout-note
+
+**Quantitative Variables**:
+
+1.  **production_budget**: The amount of money spent to produce the movie (numeric).
+
+2.  **domestic_gross**: The revenue earned from the domestic market (numeric).
+
+3.  **worldwide_gross**: The total revenue earned globally (numeric).
+:::
+
+::: callout-note
+**Qualitative Variables**:
+
+1.  **release_date**: The date the movie was released (character).
+
+2.  **movie**: The title of the movie (character).
+
+3.  **distributor**: The company responsible for distributing the movie (character).
+
+4.  **mpaa_rating**: The rating assigned to the movie by the Motion Picture Association (character).
+
+5.  **genre**: The category or genre of the movie (character).
+
+6.  **decade**: The decade in which the movie was released (character).
+:::
+
+::: callout-note
+**Observations**:
+
+-   The dataset contains information about various movies, including their financial performance, release details, and categorization.
+
+-   **Rows and columns**: The dataset consists of 3310 rows and 10 columns
+:::
+
 ```{r}
 movieprofits <- movieprofits %>%
-  drop_na() %>% mutate(across(everything(), ~ as.character(.)))  # Convert all columns to character type. This was not taught in class, I looked it up.
+  drop_na() %>% mutate(across(everything(), ~ as.character(.))) # I converted all columns to character type so that I don’t run into issues later when grouping by genre and distributor to calculate the median profit ratio. This way, everything is in a consistent format and I avoid any weird errors.This was not taught in class, I looked it up.
+
 
 glimpse(movieprofits)
 ```
@@ -47,12 +87,12 @@ skim(movieprofits)
 movieprofits
 ```
 
-Replicating the graph.
+## Replicating the plot
 
 ```{r}
 # Creating a profit ratio column
 movieprofits <- movieprofits %>%
-  mutate(profit_ratio = as.numeric(profit_ratio) / as.numeric(production_budget))  # Replace with actual column names
+  mutate(profit_ratio = as.numeric(profit_ratio) / as.numeric(production_budget))  
 
 # Grouping by genre and distributor to calculate median profit ratio
 median_profit_data <- movieprofits %>%
@@ -62,8 +102,6 @@ median_profit_data <- movieprofits %>%
 
 glimpse(median_profit_data)
 ```
-
-\
 
 ```{r}
 # Set graph theme
@@ -80,4 +118,20 @@ ggplot(median_profit_data, aes(x = median_profit_ratio, y = genre)) + geom_col()
 
 ```
 
-\
+::: callout-note
+The target variable is the **median profit ratio**. The predictor variables include **genre** and **distributor**.
+
+This graph shows how much money films make compared to how much it costs to make them. On the bottom side, there is the median profit ratio, which is like a score that tells us how good a movie is at making money compared to its budget. If the score is high, it means the movie is making a lot more money than it cost to make. On the left side, there are 5 different film genres so we can see how each type of movie does in terms of profit. The graph has different sections for each film distributor, which means we can compare how different companies are doing with their movies in various genres. Each bar shows how well a particular genre is doing for a specific distributor. Longer bars meaning better profits. (We can perceive length better than height)
+
+### Inference
+
+From looking at this graph, we can say that horroe movies are making the most money for different distributors. On the flip side, action and adventure movies aren’t doing so well, so they might not be worth the investment. Overall, this graph can also help ppl in the film business figure out which movies to focus on, so they can make better decisions about what to produce.
+
+**Questions to answer-**
+
+-   How do different genres perform financially?
+
+-   Which distributors have the highest median profit ratios for their films?
+
+-   Is there a relationship between genre and distributor performance?
+:::

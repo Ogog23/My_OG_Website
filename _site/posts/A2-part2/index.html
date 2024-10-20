@@ -243,7 +243,8 @@ The following object is masked from 'package:mosaic':
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>movieprofits <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"../../Data/movie_profit.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Reading in te dataset</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>movieprofits <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"../../Data/movie_profit.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 3310 Columns: 10
 ── Column specification ────────────────────────────────────────────────────────
@@ -556,11 +557,71 @@ quantitative variables:
 5 2.010000e+03 1.998785e+03 1.061308e+01 3310       0</code></pre>
 </div>
 </div>
+</section>
+<section id="data-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="data-dictionary">Data Dictionary</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Quantitative Variables</strong>:</p>
+<ol type="1">
+<li><p><strong>production_budget</strong>: The amount of money spent to produce the movie (numeric).</p></li>
+<li><p><strong>domestic_gross</strong>: The revenue earned from the domestic market (numeric).</p></li>
+<li><p><strong>worldwide_gross</strong>: The total revenue earned globally (numeric).</p></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Qualitative Variables</strong>:</p>
+<ol type="1">
+<li><p><strong>release_date</strong>: The date the movie was released (character).</p></li>
+<li><p><strong>movie</strong>: The title of the movie (character).</p></li>
+<li><p><strong>distributor</strong>: The company responsible for distributing the movie (character).</p></li>
+<li><p><strong>mpaa_rating</strong>: The rating assigned to the movie by the Motion Picture Association (character).</p></li>
+<li><p><strong>genre</strong>: The category or genre of the movie (character).</p></li>
+<li><p><strong>decade</strong>: The decade in which the movie was released (character).</p></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Observations</strong>:</p>
+<ul>
+<li><p>The dataset contains information about various movies, including their financial performance, release details, and categorization.</p></li>
+<li><p><strong>Rows and columns</strong>: The dataset consists of 3310 rows and 10 columns</p></li>
+</ul>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>movieprofits <span class="ot">&lt;-</span> movieprofits <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">as.character</span>(.)))  <span class="co"># Convert all columns to character type. This was not taught in class, I looked it up.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">as.character</span>(.))) <span class="co"># I converted all columns to character type so that I don’t run into issues later when grouping by genre and distributor to calculate the median profit ratio. This way, everything is in a consistent format and I avoid any weird errors.This was not taught in class, I looked it up.</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(movieprofits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 3,150
 Columns: 10
@@ -795,11 +856,13 @@ categorical variables:
 #   profit_ratio &lt;chr&gt;, decade &lt;chr&gt;</code></pre>
 </div>
 </div>
-<p>Replicating the graph.</p>
+</section>
+<section id="replicating-the-plot" class="level2">
+<h2 class="anchored" data-anchor-id="replicating-the-plot">Replicating the plot</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a profit ratio column</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>movieprofits <span class="ot">&lt;-</span> movieprofits <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">profit_ratio =</span> <span class="fu">as.numeric</span>(profit_ratio) <span class="sc">/</span> <span class="fu">as.numeric</span>(production_budget))  <span class="co"># Replace with actual column names</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">profit_ratio =</span> <span class="fu">as.numeric</span>(profit_ratio) <span class="sc">/</span> <span class="fu">as.numeric</span>(production_budget))  </span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouping by genre and distributor to calculate median profit ratio</span></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>median_profit_data <span class="ot">&lt;-</span> movieprofits <span class="sc">%&gt;%</span></span>
@@ -819,8 +882,6 @@ $ distributor         &lt;chr&gt; "20th&nbsp;Century&nbsp;Fox", "Other", "Paramo
 $ median_profit_ratio &lt;dbl&gt; 4326662, 4289208, 3566068, 3356647, 3560683, 23373…</code></pre>
 </div>
 </div>
-<p><br>
-</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set graph theme</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span>
@@ -839,8 +900,30 @@ $ median_profit_ratio &lt;dbl&gt; 4326662, 4289208, 3566068, 3356647, 3560683, 2
 </div>
 </div>
 </div>
-<p><br>
-</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The target variable is the <strong>median profit ratio</strong>. The predictor variables include <strong>genre</strong> and <strong>distributor</strong>.</p>
+<p>This graph shows how much money films make compared to how much it costs to make them. On the bottom side, there is the median profit ratio, which is like a score that tells us how good a movie is at making money compared to its budget. If the score is high, it means the movie is making a lot more money than it cost to make. On the left side, there are 5 different film genres so we can see how each type of movie does in terms of profit. The graph has different sections for each film distributor, which means we can compare how different companies are doing with their movies in various genres. Each bar shows how well a particular genre is doing for a specific distributor. Longer bars meaning better profits. (We can perceive length better than height)</p>
+<section id="inference" class="level3">
+<h3 class="anchored" data-anchor-id="inference">Inference</h3>
+<p>From looking at this graph, we can say that horroe movies are making the most money for different distributors. On the flip side, action and adventure movies aren’t doing so well, so they might not be worth the investment. Overall, this graph can also help ppl in the film business figure out which movies to focus on, so they can make better decisions about what to produce.</p>
+<p><strong>Questions to answer-</strong></p>
+<ul>
+<li><p>How do different genres perform financially?</p></li>
+<li><p>Which distributors have the highest median profit ratios for their films?</p></li>
+<li><p>Is there a relationship between genre and distributor performance?</p></li>
+</ul>
+</section>
+</div>
+</div>
 
 
 </section>
