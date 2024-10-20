@@ -2,3 +2,73 @@
 title: "A2- School Scores"
 author: "Gayatri Jadhav"
 ---
+
+## Introduction
+
+This dataset pertains to scores obtained by students in diverse subjects. Family Income is also part of this dataset.
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+library(GGally)
+library(janitor)
+```
+
+```{r}
+schoolscores <- read_delim("../../Data/school-scores-data.csv", delim = ",")
+glimpse(schoolscores)
+```
+
+```{r}
+class(schoolscores) 
+
+```
+
+```{r}
+
+# Clean the variable names
+schoolscores <- schoolscores %>%
+  clean_names(case = "big_camel")
+
+
+```
+
+```         
+Error in clean_names(., case = "big_camel") :    could not find function "clean_names"
+```
+
+After this error, installing Janitor package.
+
+Maybe, I am too sleepy, it took me literally 30 mins to figure that the limiter was "," and not ";"
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+
+# Create the ggpairs plot
+GGally::ggpairs(
+  schoolscores %>% drop_na(),
+  # Select Quant variables only for now
+  columns = c(
+    "AcademicSubjectsArtsMusicAverageGpa", "AcademicSubjectsEnglishAverageGpa", 
+    "AcademicSubjectsForeignLanguagesAverageGpa", 
+    "AcademicSubjectsMathematicsAverageGpa", 
+    "AcademicSubjectsNaturalSciencesAverageGpa", 
+    "AcademicSubjectsSocialSciencesHistoryAverageGpa"
+  ),
+  switch = "both",
+  # axis labels in more traditional locations (left and bottom)
+  progress = FALSE,
+  # no compute progress messages needed
+  
+  # Choose the diagonal graphs (always single variable)
+  diag = list(continuous = "barDiag"),  # Choosing histogram, not density
+  # Choose lower triangle graphs, two-variable graphs
+  lower = list(continuous = wrap("smooth", alpha = 0.3, se = FALSE))
+) + 
+  ggtitle("Academic Scores in Different Subjects")
+
+```

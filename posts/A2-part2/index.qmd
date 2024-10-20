@@ -8,6 +8,7 @@ author: "Gayatri Jadhav"
 This is a dataset pertaining to movies and genres, modified for ease of analysis and plotting.
 
 ```{r}
+#| label: setup
 library(tidyverse)
 library(mosaic)
 library(skimr)
