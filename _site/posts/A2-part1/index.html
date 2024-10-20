@@ -181,6 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>This dataset pertains to scores obtained by students in diverse subjects. Family Income is also part of this dataset.</p>
+<p>The research probably asked high school students from different states about things like their family income, grades, and gender to see how these affect their math and verbal test scores.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -258,7 +259,8 @@ The following objects are masked from 'package:stats':
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>schoolscores <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"../../Data/school-scores-data.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Reading in the dataset</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>schoolscores <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"../../Data/school-scores-data.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 577 Columns: 99
 ── Column specification ────────────────────────────────────────────────────────
@@ -379,41 +381,130 @@ $ `Score Ranges.Between 700 to 800.Verbal.Total`            &lt;dbl&gt; 469, 224
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame" </code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checked the class since i was getting an Error in the next code chunk: A data frame is not a valid object for this function. I used the oldest trick in the book and restarted R for it to work.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the variable names</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>schoolscores <span class="ot">&lt;-</span> schoolscores <span class="sc">%&gt;%</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>(<span class="at">case =</span> <span class="st">"big_camel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Hint: Use the janitor package here to clean up the variable names. Try to use the big_camel case name format for variables.(Hint given on the website)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the variable names</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>schoolscores <span class="ot">&lt;-</span> schoolscores <span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>(<span class="at">case =</span> <span class="st">"big_camel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>Error in clean_names(., case = "big_camel") :    could not find function "clean_names"</code></pre>
-<p>After this error, installing Janitor package.</p>
-<p>Maybe, I am too sleepy, it took me literally 30 mins to figure that the limiter was “,” and not “;”</p>
+<p>After this error, I am installing the Janitor package.<br>
+Maybe, I’m too sleepy, it took me literally 30 mins to figure that the limiter for this dataset was “,” and not “;”</p>
+</section>
+<section id="data-dictionary-" class="level2">
+<h2 class="anchored" data-anchor-id="data-dictionary-">Data Dictionary-</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Quantitative Variables
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p><strong>Year</strong>: Represents the year of the data collection (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>TotalMath</strong>: Total math scores (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>TotalTestTakers</strong>: Number of students taking the test (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>TotalVerbal</strong>: Total verbal scores (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>AcademicSubjectsArtsMusicAverageGpa</strong>: Average GPA in Arts/Music (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>AcademicSubjectsEnglishAverageGpa</strong>: Average GPA in English (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>AcademicSubjectsForeignLanguagesAverageGpa</strong>: Average GPA in Foreign Languages (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>AcademicSubjectsMathematicsAverageGpa</strong>: Average GPA in Mathematics (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>AcademicSubjectsNaturalSciencesAverageGpa</strong>: Average GPA in Natural Sciences (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>AcademicSubjectsSocialSciencesHistoryAverageGpa</strong>: Average GPA in Social Sciences/History (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeBetween20_40KMath</strong>: Math scores for families with income between 20K and 40K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeBetween20_40KVerbal</strong>: Verbal scores for families with income between 20K and 40K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeBetween40_60KMath</strong>: Math scores for families with income between 40K and 60K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeBetween40_60KVerbal</strong>: Verbal scores for families with income between 40K and 60K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeBetween60_80KMath</strong>: Math scores for families with income between 60K and 80K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeBetween60_80KVerbal</strong>: Verbal scores for families with income between 60K and 80K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeMoreThan100KMath</strong>: Math scores for families with income over 100K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>FamilyIncomeMoreThan100KVerbal</strong>: Verbal scores for families with income over 100K (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>GenderFemaleMath</strong>: Math scores for female students (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>GenderFemaleVerbal</strong>: Verbal scores for female students (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>GenderMaleMath</strong>: Math scores for male students (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>GenderMaleVerbal</strong>: Verbal scores for male students (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween200To300MathFemales</strong>: Female scores in the 200-300 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween200To300MathMales</strong>: Male scores in the 200-300 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween300To400MathFemales</strong>: Female scores in the 300-400 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween300To400MathMales</strong>: Male scores in the 300-400 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween400To500MathFemales</strong>: Female scores in the 400-500 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween400To500MathMales</strong>: Male scores in the 400-500 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween500To600MathFemales</strong>: Female scores in the 500-600 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween500To600MathMales</strong>: Male scores in the 500-600 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween600To700MathFemales</strong>: Female scores in the 600-700 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween600To700MathMales</strong>: Male scores in the 600-700 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween700To800MathFemales</strong>: Female scores in the 700-800 range (type: &lt;dbl&gt;).</p></li>
+<li><p><strong>ScoreRangesBetween700To800MathMales</strong>: Male scores in the 700-800 range (type: &lt;dbl&gt;).</p></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Qualitative Variables
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p><strong>StateCode</strong>: Code representing the state (type: &lt;chr&gt;).</p></li>
+<li><p><strong>StateName</strong>: Name of the state (type: &lt;chr&gt;).</p></li>
+<li><p><strong>Gender</strong>: Gender classification of students</p></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Observations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Rows and columns</strong>: The dataset consists of 577 rows and 99 columns</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="replicating-the-plot" class="level2">
+<h2 class="anchored" data-anchor-id="replicating-the-plot">Replicating the plot</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set graph theme</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="at">new =</span> <span class="fu">theme_classic</span>())</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the ggpairs plot</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>GGally<span class="sc">::</span><span class="fu">ggpairs</span>(</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  schoolscores <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select Quant variables only for now</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsArtsMusicAverageGpa"</span>, <span class="st">"AcademicSubjectsEnglishAverageGpa"</span>, </span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsForeignLanguagesAverageGpa"</span>, </span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsMathematicsAverageGpa"</span>, </span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsNaturalSciencesAverageGpa"</span>, </span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsSocialSciencesHistoryAverageGpa"</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">switch =</span> <span class="st">"both"</span>,</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># axis labels in more traditional locations (left and bottom)</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># no compute progress messages needed</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Choose the diagonal graphs (always single variable)</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">diag =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="st">"barDiag"</span>),  <span class="co"># Choosing histogram, not density</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Choose lower triangle graphs, two-variable graphs</span></span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">"smooth"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">se =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> </span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Academic Scores in Different Subjects"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set graph theme</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="at">new =</span> <span class="fu">theme_classic</span>())</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the ggpairs plot</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>GGally<span class="sc">::</span><span class="fu">ggpairs</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  schoolscores <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select Quant variables(target variables) only for now</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsArtsMusicAverageGpa"</span>, <span class="st">"AcademicSubjectsEnglishAverageGpa"</span>, </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsForeignLanguagesAverageGpa"</span>, </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsMathematicsAverageGpa"</span>, </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsNaturalSciencesAverageGpa"</span>, </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AcademicSubjectsSocialSciencesHistoryAverageGpa"</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">switch =</span> <span class="st">"both"</span>,</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># axis labels in more traditional locations (left and bottom)</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># no compute progress messages needed</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Choose the diagonal graphs (always single variable)</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">diag =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="st">"barDiag"</span>),  <span class="co"># Choosing histogram, not density</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Choose lower triangle graphs, two-variable graphs</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">"smooth"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">se =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> </span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Academic Scores in Different Subjects"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
@@ -428,6 +519,26 @@ $ `Score Ranges.Between 700 to 800.Verbal.Total`            &lt;dbl&gt; 469, 224
 <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The above plot shows correlations between average GPAs in various subjects. For example, students who perform well in English Subject often also achieve high GPAs in Social Sciences, indicating a possible connection between success in language subjects and success in subjects that involve thinking and analysis.</p>
+<p>If the target variable is <code>AcademicSubjectsMathematicsAverageGpa</code>, then the GPAs in subjects like English, Arts &amp; Music, Foreign Languages, Natural Sciences, and Social Sciences would be your predictor variables.</p>
+<p><strong>Questions to answer-</strong></p>
+<ul>
+<li><p>Do students who get good grades in one subject also do well in other subjects?</p></li>
+<li><p>Are some subjects more closely connected in terms of grades?</p></li>
+<li><p>Does doing well in creative subjects like art and music mean you’re likely to do well in academic subjects too?</p></li>
+</ul>
 </div>
 </div>
 

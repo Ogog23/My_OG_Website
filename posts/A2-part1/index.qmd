@@ -7,6 +7,8 @@ author: "Gayatri Jadhav"
 
 This dataset pertains to scores obtained by students in diverse subjects. Family Income is also part of this dataset.
 
+The research probably asked high school students from different states about things like their family income, grades, and gender to see how these affect their math and verbal test scores.
+
 ```{r}
 #| label: setup
 library(tidyverse)
@@ -18,16 +20,20 @@ library(janitor)
 ```
 
 ```{r}
+#Reading in the dataset
 schoolscores <- read_delim("../../Data/school-scores-data.csv", delim = ",")
+
 glimpse(schoolscores)
 ```
 
 ```{r}
 class(schoolscores) 
-
+#checked the class since i was getting an Error in the next code chunk: A data frame is not a valid object for this function. I used the oldest trick in the book and restarted R for it to work.
 ```
 
 ```{r}
+
+#Hint: Use the janitor package here to clean up the variable names. Try to use the big_camel case name format for variables.(Hint given on the website)
 
 # Clean the variable names
 schoolscores <- schoolscores %>%
@@ -40,9 +46,100 @@ schoolscores <- schoolscores %>%
 Error in clean_names(., case = "big_camel") :    could not find function "clean_names"
 ```
 
-After this error, installing Janitor package.
+After this error, I am installing the Janitor package.\
+Maybe, I'm too sleepy, it took me literally 30 mins to figure that the limiter for this dataset was "," and not ";"
 
-Maybe, I am too sleepy, it took me literally 30 mins to figure that the limiter was "," and not ";"
+## Data Dictionary-
+
+::: callout-note
+## Quantitative Variables
+
+-   **Year**: Represents the year of the data collection (type: \<dbl\>).
+
+-   **TotalMath**: Total math scores (type: \<dbl\>).
+
+-   **TotalTestTakers**: Number of students taking the test (type: \<dbl\>).
+
+-   **TotalVerbal**: Total verbal scores (type: \<dbl\>).
+
+-   **AcademicSubjectsArtsMusicAverageGpa**: Average GPA in Arts/Music (type: \<dbl\>).
+
+-   **AcademicSubjectsEnglishAverageGpa**: Average GPA in English (type: \<dbl\>).
+
+-   **AcademicSubjectsForeignLanguagesAverageGpa**: Average GPA in Foreign Languages (type: \<dbl\>).
+
+-   **AcademicSubjectsMathematicsAverageGpa**: Average GPA in Mathematics (type: \<dbl\>).
+
+-   **AcademicSubjectsNaturalSciencesAverageGpa**: Average GPA in Natural Sciences (type: \<dbl\>).
+
+-   **AcademicSubjectsSocialSciencesHistoryAverageGpa**: Average GPA in Social Sciences/History (type: \<dbl\>).
+
+-   **FamilyIncomeBetween20_40KMath**: Math scores for families with income between 20K and 40K (type: \<dbl\>).
+
+-   **FamilyIncomeBetween20_40KVerbal**: Verbal scores for families with income between 20K and 40K (type: \<dbl\>).
+
+-   **FamilyIncomeBetween40_60KMath**: Math scores for families with income between 40K and 60K (type: \<dbl\>).
+
+-   **FamilyIncomeBetween40_60KVerbal**: Verbal scores for families with income between 40K and 60K (type: \<dbl\>).
+
+-   **FamilyIncomeBetween60_80KMath**: Math scores for families with income between 60K and 80K (type: \<dbl\>).
+
+-   **FamilyIncomeBetween60_80KVerbal**: Verbal scores for families with income between 60K and 80K (type: \<dbl\>).
+
+-   **FamilyIncomeMoreThan100KMath**: Math scores for families with income over 100K (type: \<dbl\>).
+
+-   **FamilyIncomeMoreThan100KVerbal**: Verbal scores for families with income over 100K (type: \<dbl\>).
+
+-   **GenderFemaleMath**: Math scores for female students (type: \<dbl\>).
+
+-   **GenderFemaleVerbal**: Verbal scores for female students (type: \<dbl\>).
+
+-   **GenderMaleMath**: Math scores for male students (type: \<dbl\>).
+
+-   **GenderMaleVerbal**: Verbal scores for male students (type: \<dbl\>).
+
+-   **ScoreRangesBetween200To300MathFemales**: Female scores in the 200-300 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween200To300MathMales**: Male scores in the 200-300 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween300To400MathFemales**: Female scores in the 300-400 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween300To400MathMales**: Male scores in the 300-400 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween400To500MathFemales**: Female scores in the 400-500 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween400To500MathMales**: Male scores in the 400-500 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween500To600MathFemales**: Female scores in the 500-600 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween500To600MathMales**: Male scores in the 500-600 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween600To700MathFemales**: Female scores in the 600-700 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween600To700MathMales**: Male scores in the 600-700 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween700To800MathFemales**: Female scores in the 700-800 range (type: \<dbl\>).
+
+-   **ScoreRangesBetween700To800MathMales**: Male scores in the 700-800 range (type: \<dbl\>).
+:::
+
+::: callout-note
+## Qualitative Variables
+
+-   **StateCode**: Code representing the state (type: \<chr\>).
+
+-   **StateName**: Name of the state (type: \<chr\>).
+
+-   **Gender**: Gender classification of students
+:::
+
+::: callout-note
+#### Observations
+
+-   **Rows and columns**: The dataset consists of 577 rows and 99 columns
+:::
+
+## Replicating the plot
 
 ```{r}
 # Set graph theme
@@ -51,7 +148,7 @@ theme_set(new = theme_classic())
 # Create the ggpairs plot
 GGally::ggpairs(
   schoolscores %>% drop_na(),
-  # Select Quant variables only for now
+  # Select Quant variables(target variables) only for now
   columns = c(
     "AcademicSubjectsArtsMusicAverageGpa", "AcademicSubjectsEnglishAverageGpa", 
     "AcademicSubjectsForeignLanguagesAverageGpa", 
@@ -72,3 +169,17 @@ GGally::ggpairs(
   ggtitle("Academic Scores in Different Subjects")
 
 ```
+
+::: callout-note
+The above plot shows correlations between average GPAs in various subjects. For example, students who perform well in English Subject often also achieve high GPAs in Social Sciences, indicating a possible connection between success in language subjects and success in subjects that involve thinking and analysis.
+
+If the target variable is `AcademicSubjectsMathematicsAverageGpa`, then the GPAs in subjects like English, Arts & Music, Foreign Languages, Natural Sciences, and Social Sciences would be your predictor variables.
+
+**Questions to answer-**
+
+-   Do students who get good grades in one subject also do well in other subjects?
+
+-   Are some subjects more closely connected in terms of grades?
+
+-   Does doing well in creative subjects like art and music mean you're likely to do well in academic subjects too?
+:::
