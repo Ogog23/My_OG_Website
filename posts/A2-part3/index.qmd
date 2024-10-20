@@ -40,12 +40,21 @@ ggplot(workplacegender_clean, aes(x = percent_female, y = total_earnings_male, s
   labs(x = "% of workforce reported as female", 
        y = "Median salary in the occupation", 
        size = "Total # of workers", 
-       title = "Salaries and Gender Proportion in the Workforce") +
+       title = "Salaries and Gender Proportion in the Workforce") + scale_y_continuous(labels = scales::dollar_format()) 
+#for getting the dollar sign
 
-  scale_size_area(max_size = 15) +
-  theme(plot.title = element_text(hjust = 0.5), 
-        panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank()) + 
-  scale_y_continuous(labels = scales::dollar_format())
+#I couldn't figure out a way to code the y-axis to show the median salaries as percentages instead of in scientific notation. Instead of getting the usual salary figures, I ended up with numbers like 2e+14, 4e+14, 6e+14, and 8e+14, which are super confusing. 
 
 ```
+
+::: callout-note
+-   **Target Variable:** Median salary for men in the occupation (`total_earnings_male`)
+
+-   **Predictor Variable:** Percentage of workforce reported as female (`percent_female`)
+:::
+
+::: callout-note
+The graph is a scatter plot that shows the relationship between the percentage of women in the workforce and the median salary for men in various occupations. Each dot represents a different job, and the size of the dot tells how many workers are in that job overall. The x-axis shows the percentage of female workers in that job, and the y-axis shows the median salary for male workers, with a dollar sign.
+
+From looking at the graph, it is seen, if a job has a high percentage of female workers and men are earning less salaries, it shows some kind of inequality. And if a job has a high percentage of female workers and men are also earning good salaries, then the job pays them well regardless of their gender.
+:::
