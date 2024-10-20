@@ -2,3 +2,50 @@
 title: "A2- Gender at the Work Place"
 author: "Gayatri Jadhav"
 ---
+
+## Introduction
+
+This is a dataset pertaining to gender and compensation at the workplace, modified for ease of analysis and plotting.
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+```
+
+```{r}
+workplacegender <- read_delim("../../Data/job_gender_data.csv", delim = ";")
+glimpse(workplacegender)
+```
+
+```{r}
+skim(workplacegender)
+```
+
+```{r}
+workplacegender_clean <- workplacegender %>%
+  drop_na(total_earnings_male, wage_percent_of_male)
+
+workplacegender
+```
+
+```{r}
+library(ggplot2)
+
+# Plotting salaries and gender proportion in the workforce
+ggplot(workplacegender_clean, aes(x = percent_female, y = total_earnings_male, size = total_workers)) +
+  geom_point() +
+  labs(x = "% of workforce reported as female", 
+       y = "Median salary in the occupation", 
+       size = "Total # of workers", 
+       title = "Salaries and Gender Proportion in the Workforce") +
+
+  scale_size_area(max_size = 15) +
+  theme(plot.title = element_text(hjust = 0.5), 
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) + 
+  scale_y_continuous(labels = scales::dollar_format())
+
+```
