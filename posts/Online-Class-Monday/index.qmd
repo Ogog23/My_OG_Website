@@ -1,0 +1,136 @@
+---
+title: "Online Class Monday"
+author: "Gayatri Jadhav"
+---
+
+wkt - wellknown text
+
+<https://av-quarto.netlify.app/content/labs/r-labs/maps/gram-maps.html>
+
+```{r}
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+# Run this in your console first
+# devtools::install_github("ropensci/rnaturalearthhires")
+library(rnaturalearthhires)
+
+# Plotting Maps
+library(tidyverse) # Maps using ggplot + geom_sf
+library(tmap) # Thematic Maps, static and interactive
+library(osmdata) # Fetch map data from osmdata.org
+library(leaflet) # interactive Maps
+library(threejs) # Globe maps in R. Part of the htmlwidgets family of packages
+
+# For Spatial Data Frame Processing
+library(sf)
+```
+
+<https://av-quarto.netlify.app/content/courses/r4artists/modules/90-gom/spatial>
+
+<https://arvindvenkatadri.com/labs/r-for-artists/06-spatial/06-grammar-of-maps>
+
+```{r}
+# https://boundingbox.klokantech.com
+# CSV: 77.574028,12.917262,77.595073,12.939895
+bbox_1 <- matrix(
+  c(77.574028, 12.917262, 77.595073, 12.939895),
+  byrow = FALSE,
+  nrow = 2,
+  ncol = 2,
+  dimnames = list(c('x', 'y'), c('min', 'max'))
+)
+bbox_1
+```
+
+```{r}
+# Using getbb command from the osmdata package
+bbox_2 <- osmdata::getbb("Jayanagar, Bangalore, India")
+bbox_2
+```
+
+```{r}
+osmdata::available_features() %>% as_tibble()
+```
+
+```{r}
+available_tags(feature = "highway")
+```
+
+```{r}
+available_tags("amenity")
+```
+
+```{r}
+available_tags("natural")
+```
+
+```{r}
+# Eval is set to false here
+# This code is for reference
+# Run these commands ONCE in your Console
+# Or run this chunk manually one time
+
+# Get all restaurants, atms, colleges within my bbox
+locations <- 
+  osmdata::opq(bbox = bbox_2) %>% 
+  osmdata::add_osm_feature(key = "amenity", 
+                           value = c("restaurant", "atm", "college")) %>% 
+  osmdata_sf() %>%  # Convert to Simple Features format
+  purrr::pluck("osm_points") # Pull out the data frame of interest
+
+# Get all buildings within my bbox
+dat_buildings <-
+  osmdata::opq(bbox = bbox_2) %>% 
+  osmdata::add_osm_feature(key = "building") %>% 
+  osmdata_sf() %>% 
+  purrr::pluck("osm_polygons") 
+
+# Get all residential roads within my bbox
+dat_roads <- 
+  osmdata::opq(bbox = bbox_2) %>% 
+  osmdata::add_osm_feature(key = "highway", 
+                           value = c("residential")) %>% 
+  osmdata_sf() %>% 
+  purrr::pluck("osm_lines") 
+
+# Get all parks / natural /greenery areas and spots within my bbox
+dat_natural <-   
+  osmdata::opq(bbox = bbox_2) %>% 
+  osmdata::add_osm_feature(key = "natural",
+                           value = c("tree", "water", "wood")) %>% 
+  osmdata_sf()
+dat_natural
+
+dat_trees <- 
+  dat_natural %>% 
+  purrr::pluck("osm_points") 
+
+dat_greenery <- 
+  dat_natural %>% pluck("osm_polygons")
+```
+
+```{r}
+# Eval is set to false here
+# This code is for reference
+# Run these commands ONCE in your Console
+# Or manually run this chunk once
+
+st_write(dat_roads, dsn = "roads.gpkg", 
+         append = FALSE, quiet = FALSE)
+
+st_write(dat_buildings, 
+         dsn = "buildings.gpkg", 
+         append = FALSE, 
+         quiet = FALSE)
+
+st_write(dat_greenery, dsn = "greenery.gpkg", 
+         append = FALSE,quiet = FALSE)
+
+st_write(dat_trees, dsn = "trees.gpkg", 
+         append = FALSE,quiet = FALSE)
+```
+
+<https://en.wikipedia.org/wiki/Great_circle>
+
+<https://av-quarto.netlify.app/content/courses/analytics/inference/listing>

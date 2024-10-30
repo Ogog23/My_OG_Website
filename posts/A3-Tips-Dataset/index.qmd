@@ -1,0 +1,175 @@
+---
+title: "A3 - Tips Dataset"
+author: "Gayatri Jadhav"
+prof: "Arvind Venkatadri"
+---
+
+## Introduction
+
+This dataset looks at **tips** left by restaurant customers and includes details like their **gender** and whether they prefer **Veg** or **Non-Veg** food. It helps see if there are any patterns, like whether people who eat certain types of food tip more or if certain groups tend to give bigger tips.
+
+```{r}
+#| label: setup
+library(tidyverse) # Data Processing in R
+library(mosaic) # Our workhorse for stats, sampling
+library(ggformula)
+library(skimr)
+library(crosstable)
+```
+
+```{r}
+tip <- read_csv("../../Data/tip.csv")
+
+glimpse(tip)
+```
+
+```{r}
+# Crosstabulating the Tip variable against Preferance (categorical variable) to summarize the relationship
+# This helped me understand how tips are distributed across the two preferences (Veg/Non-veg)
+
+tip %>% 
+  crosstable(Tip ~ Preferance) %>% 
+  as_flextable()
+
+```
+
+```{r}
+# Mutating by converting Gender and Preferance into factors
+
+tips_modified <- tip %>%
+  dplyr::mutate(
+  Gender = as_factor(Gender),
+  Preferance = as_factor(Preferance)
+  )
+glimpse(tips_modified)
+
+
+```
+
+```{r}
+# Creating a histogram to see the distribution of Tips by Preferance
+tips_modified %>%
+  gf_histogram(~Tip|Preferance, fill = ~Preferance,position= "dodge" ,data = tips_modified) 
+```
+
+```{r}
+Veg <- tips_modified %>% 
+  filter(Preferance == "Veg") %>% 
+  select(Tip)
+
+Nonveg <- tips_modified %>% 
+  filter(Preferance == "Non-veg") %>% 
+  select(Tip)
+
+shapiro.test(Veg$Tip) # Performing the Shapiro-Wilk test for normality on the "Veg" group's Tip values
+
+shapiro.test(Nonveg$Tip)# Performing the Shapiro-Wilk test for normality on the "Non-veg" group's Tip values
+
+```
+
+::: callout-note
+The p-values are extremely small, indicating that neither the Veg nor the Non-veg Tip data is normally distributed.
+:::
+
+```{r}
+mosaic::t_test( Tip ~ Preferance, data = tips_modified ) %>% 
+
+  broom::tidy() 
+```
+
+::: callout-note
+Since neither the Veg nor Non-veg Tip data is normally distributed, using a t-test wouldn't be the right choice. Instead, it's better to use the **Wilcoxon test**, which is a non-parametric method that's ideal for comparing the medians when the data isn’t normally distributed.
+:::
+
+Splitting the dataset by Preferance into Veg and Nonveg groups-
+
+```{r}
+
+#Selecting only the Tip column for further testing
+tips_modified %>% 
+  filter(Preferance == "Veg") %>% 
+  select(Tip) -> Veg
+
+# Checking the "Veg" group Tip values
+Veg
+
+
+```
+
+```{r}
+#Extracting the Tip values for the "Non-veg" group
+tips_modified %>% 
+  filter(Preferance == "Non-veg") %>% 
+  select(Tip) -> Nonveg
+
+# Checking the "Non-veg" group Tip values
+Nonveg 
+```
+
+```{r}
+wilcox.test(Tip ~ Preferance , data = tips_modified) %>% 
+  broom::tidy()
+```
+
+::: callout-note
+The Wilcoxon test gave a result of 437 for the statistic and a **p-value of 0.83**. This high p-value means there’s no significant difference between the tips left by the Veg and Non-veg groups. IBoth groups leave about the same amount in tips.
+:::
+
+```{r}
+obs_diff_tip <- diffmean( Tip ~ Preferance, data = tips_modified) 
+obs_diff_tip
+```
+
+::: callout-note
+The **diffmean** result is **-2.33**, which means that, on average, the Non-veg group left 2.33 less in tips than the Veg group. But because the Wilcoxon test has not showed any significant difference, this small difference doesn’t actually matter much.
+:::
+
+```{r}
+# Generating a null distribution for the difference in means through permutation testing (5000 permutations)
+null_dist_tip <- 
+  do(4999) * diffmean(data = tips_modified, Tip ~ shuffle(Preferance))
+null_dist_tip
+
+#Everytime I run it, the values are different since the data is shuffled.
+
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+#
+gf_histogram(data = null_dist_tip, ~ diffmean, bins = 25) %>%
+  gf_vline(xintercept = obs_diff_tip, 
+           colour = "red", linewidth = 1,
+           title = "Null Distribution by Permutation", 
+           subtitle = "Histogram") %>% 
+  gf_labs(x = "Difference in Means")
+###
+gf_ecdf(data = null_dist_tip, ~ diffmean, 
+        linewidth = 1) %>%
+  gf_vline(xintercept = obs_diff_tip, 
+           colour = "red", linewidth = 1,
+           title = "Null Distribution by Permutation", 
+           subtitle = "Cumulative Density") %>% 
+  gf_labs(x = "Difference in Means")
+```
+
+::: callout-note
+Inference:-
+
+-   The **histogram** shows the differences between the two groups (Veg and Non-veg) when the data is shuffled randomly. The red line shows the actual difference that was observed (-2.33).
+
+-   Since the red line falls in the middle of the random results,so the difference is not unusual- it could just be due to random chance.
+
+-   The **cumulative plot** (the second graph) backs this up. It shows that the observed difference is well within what I’d expect if there was no real difference.
+
+**Conclusion**: There's no strong evidence that the difference in tips between Veg and Non-veg preferences is meaningful, it could easily be due to chance. I initially thought the tips dataset might be useless because of the lack of significant differences between the groups. However, during class, i realised that even with no significant results, the data can still provide valuable insights into patterns and trends in tipping behavior. So, it's definitely not useless!
+:::
+
+sample data\
+mean\
+shapiro\
+t-test\
+if necessary winc
+
+<https://av-quarto.netlify.app/content/courses/analytics/inference/modules/110-twomeans/#observed-and-test-statistic>

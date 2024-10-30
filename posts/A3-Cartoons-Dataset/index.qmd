@@ -1,0 +1,76 @@
+---
+title: "A3 - Cartoons Dataset"
+author: "Gayatri Jadhav"
+prof: "Arvind Venkatadri"
+---
+
+```{r}
+#| label: setup
+library(tidyverse) # Tidy data processing
+library(ggformula) # Formula based plots
+library(mosaic) # Data inspection and Statistical Inference
+library(broom) # Tidy outputs from Statistical Analyses
+library(infer) # Statistical Inference, Permutation/Bootstrap
+library(patchwork) # Arranging Plots
+library(ggprism) # Interesting Categorical Axes
+library(supernova) # Beginner-Friendly ANOVA Tables
+```
+
+```{r}
+cartoon <- read_csv("../../Data/Cartoon.csv")
+
+glimpse(cartoon)
+
+```
+
+```{r}
+cartoon_modified <- cartoon %>%
+  dplyr::mutate(
+  Gender = as_factor(Gender),
+  Cartoon = as_factor(Cartoon)
+  )
+glimpse(cartoon_modified)
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+##
+gf_histogram(~Rating,
+  fill = ~Cartoon,
+  data = cartoon_modified, alpha = 0.5
+) %>%
+  gf_vline(xintercept = ~ mean(Rating)) %>%
+  gf_labs(
+    title = "Histograms of Cartoon Ratings Distributions",
+    x = "Rating", y = "Count"
+  ) %>%
+  gf_text(11 ~ (mean(cartoon_modified$Rating) + 1.5),
+    label = "Overall Mean"
+  ) %>%
+  gf_refine(guides(fill = guide_legend(title = "Cartoon")))
+```
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
+##
+gf_boxplot(
+  data = cartoon_modified,
+  Rating ~ Cartoon,
+  fill = ~ Cartoon,
+  alpha = 0.5
+) %>%
+   gf_vline(xintercept = mean(cartoon_modified$Rating)) %>%
+  gf_labs(
+    title = "Boxplots of Cartoon Ratings vs Cartoon",
+    x = "Cartoon", y = "Rating",
+    caption = "Using ggprism"
+  ) %>%
+  gf_refine(
+    scale_x_discrete(guide = "prism_bracket"),
+    guides(fill = guide_legend(title = "Cartoon"))
+  )
+```
+
+https://av-quarto.netlify.app/content/courses/analytics/inference/modules/130-threemeansormore/

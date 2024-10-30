@@ -90,6 +90,8 @@ wages_clean %>%
 wages_clean <-
   wages %>%
   tidyr::drop_na(educcat) 
+
+glimpse(wages_clean)
 ```
 
 ```{r}

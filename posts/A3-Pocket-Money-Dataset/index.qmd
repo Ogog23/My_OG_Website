@@ -1,0 +1,142 @@
+---
+title: "A3- Pocket Money Dataset"
+author: "Gayatri Jadhav"
+prof: "Arvind Venkatadri"
+---
+
+## Introduction
+
+This dataset looks at pocket money spent by Srishti students and includes their gender. It aims to explore whether there are any patterns related to gender, such as whether males or females tend to spend more pocket money.
+
+```{r}
+#| label: setup
+library(tidyverse) # Data Processing in R
+library(mosaic) 
+library(ggformula)
+library(skimr)
+library(crosstable)
+```
+
+```{r}
+pocketmoney <- read_csv("../../Data/PocketMoney.csv")
+
+glimpse(pocketmoney)
+```
+
+```{r}
+# Removing the 5th column (...5) which contains only NA values
+pocketmoney_clean <- pocketmoney %>%
+  select(-...5)
+
+glimpse(pocketmoney_clean)
+```
+
+```{r}
+# Crosstabulating Money_spent against Gender to see spending patterns by gender
+pocketmoney_clean %>% 
+  crosstable(Money_spent ~ Gender) %>% 
+  as_flextable()
+
+#The median amount spent is 250 for males and 280 for females, with different ranges of spending patterns.
+# On average, males spend slightly more (748.6) than females (693.3).
+
+```
+
+```{r}
+# Mutating by converting Gender into factors
+pocketmoney_modified <- pocketmoney_clean %>%
+  dplyr::mutate(
+  Gender = as_factor(Gender)
+  )
+glimpse(pocketmoney_modified)
+```
+
+```{r}
+# Creating a histogram to visualize the distribution of money spent by gender
+pocketmoney_modified %>%
+  gf_histogram(~Money_spent | Gender, fill = ~Gender, position = "dodge", data = pocketmoney_modified)
+```
+
+
+```{r}
+# Split data by Gender
+Male <- pocketmoney_modified %>% 
+filter(Gender == "Male") %>% 
+select(Money_spent)
+
+Female <- pocketmoney_modified %>% 
+filter(Gender == "Female") %>% 
+select(Money_spent)
+
+
+# Perform Shapiro-Wilk test for normality
+
+shapiro.test(Male$Money_spent) # Shapiro-Wilk test for normality on the "Male" gender group
+
+shapiro.test(Female$Money_spent) # Shapiro-Wilk test for normality on the "Female" gender group
+
+```
+
+::: callout-note
+The p-values for both Males and Females are extremely small, far below the common significance level of 0.05. This means I can reject the null hypothesis of normality, confirming that the money spent data for both males and females does not follow a normal distribution.
+:::
+
+```{r}
+
+# Since the data is not normally distributed, performing a Wilcoxon test
+wilcox.test(Money_spent ~ Gender, data = pocketmoney_modified) %>%
+  broom::tidy()
+
+```
+
+::: callout-note
+The Wilcoxon test gave a result with a **p-value of 0.38**, suggesting **no significant difference** in the amount of money spent between the males and females in the dataset.
+:::
+
+```{r}
+# Calculating the observed difference in mean money spent between genders
+obs_diff_money_spent <- diffmean(Money_spent ~ Gender, data = pocketmoney_modified)
+obs_diff_money_spent
+
+```
+
+::: callout-note
+The **observed difference** between the amount of money spent by males and females is -55.29, meaning that, on average, males spend ₹55.29 more than females. However, the Wilcoxon test shows that this difference is **not statistically significant**.
+:::
+
+```{r}
+# Generating a null distribution for the difference in means through permutation testing (4999 permutations)
+null_dist_money_spent <- 
+  do(4999) * diffmean(data = pocketmoney_modified, Money_spent ~ shuffle(Gender))
+
+null_dist_money_spent
+
+# Plot the histogram of null distribution with the observed difference
+gf_histogram(data = null_dist_money_spent, ~ diffmean, bins = 25) %>%
+  gf_vline(xintercept = obs_diff_money_spent, 
+           colour = "red", linewidth = 1,
+           title = "Null Distribution by Permutation", 
+           subtitle = "Histogram") %>% 
+  gf_labs(x = "Difference in Means")
+
+# Plot the cumulative density function
+gf_ecdf(data = null_dist_money_spent, ~ diffmean, linewidth = 1) %>%
+  gf_vline(xintercept = obs_diff_money_spent, 
+           colour = "red", linewidth = 1,
+           title = "Null Distribution by Permutation", 
+           subtitle = "Cumulative Density") %>% 
+  gf_labs(x = "Difference in Means")
+
+```
+
+::: callout-note
+Inference:-
+
+-   The **histogram** shows the differences in money spent by males and females when the data is shuffled randomly. The red line represents the actual observed difference (-55.29).
+
+-   Since the red line is situated in the middle of the distribution of random results, this indicates that the observed difference in money spent is not unusual.
+
+-   The **cumulative plot** (the second graph) backs this up. It shows that the observed difference is well within the range we would expect if there were no real difference in spending between males and females.
+
+**Conclusion**: There's no strong evidence that the difference in money spent between males and females is statistically meaningful. The small observed difference could easily be due to chance. I think in this particular dataset, we don’t have enough evidence to say the difference is meaningful
+:::

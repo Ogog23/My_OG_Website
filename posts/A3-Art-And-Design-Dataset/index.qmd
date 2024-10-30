@@ -1,0 +1,5 @@
+---
+title: "A3 - Art And Design Dataset"
+author: "Gayatri Jadhav"
+prof: "Arvind Venkatadri"
+---

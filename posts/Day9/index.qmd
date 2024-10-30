@@ -1,0 +1,14 @@
+---
+title: "Day9 - Proportions"
+author: "Gayatri Jadhav"
+---
+
+Day 9 - proportions
+
+<https://av-quarto.netlify.app/content/courses/analytics/inference/modules/180-oneprop/>
+
+stratified sampling- Machine learning munging
+
+binomial test 1 sample - bootstrap more than 1 - permutation test kaisquare test
+
+titanic dataset
