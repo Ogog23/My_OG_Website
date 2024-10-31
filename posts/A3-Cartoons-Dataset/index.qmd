@@ -101,4 +101,126 @@ gf_boxplot(
   )
 ```
 
+
+```{r}
+# Perform ANOVA
+cartoon_anova <- aov(Rating ~ Cartoon, data = cartoon_modified)
+
+```
+
+
+```{r}
+supernova::pairwise(cartoon_anova,
+  correction = "Bonferroni", # Try "Tukey"
+  alpha = 0.05, # 95% CI calculation
+  var_equal = TRUE, # We'll see
+  plot = TRUE
+)
+```
+
+```{r}
+#ANOVA equation
+supernova::equation(cartoon_anova)
+```
+
+```{r}
+#Shapiro-Wilk test for normality on residuals
+shapiro.test(x = cartoon_anova$residuals)
+```
+```{r}
+# Shapiro-Wilk test for normality grouped by Cartoon
+cartoon_modified %>%
+  group_by(Cartoon) %>%
+  group_modify(~ .x %>%
+    select(Rating) %>%
+    as_vector() %>%
+    shapiro.test() %>%
+    broom::tidy()
+  )
+```
+
+
+```{r}
+#Residuals histogram and QQ plot
+# Set graph theme
+theme_set(new = theme_classic())
+
+cartoon_anova$residuals %>%
+  as_tibble() %>%
+  gf_dhistogram(~value, data = .) %>%
+  gf_fitdistr()
+
+cartoon_anova$residuals %>%
+  as_tibble() %>%
+  gf_qq(~value, data = .) %>%
+  gf_qqstep() %>%
+  gf_qqline()
+
+# Shapiro-Wilk test for residuals
+shapiro.test(cartoon_anova$residuals)
+
+```
+
+```{r}
+# Variance check for each Cartoon group
+cartoon_modified %>%
+  group_by(Cartoon) %>%
+  summarise(variance = var(Rating))
+
+# Levene's test for homogeneity of variances
+DescTools::LeveneTest(Rating ~ Cartoon, data = cartoon_modified)
+
+# Fligner-Killeen test for homogeneity of variances
+fligner.test(Rating ~ Cartoon, data = cartoon_modified)
+```
+
+
+```{r}
+
+
+cartoon_supernova <- supernova::pairwise(cartoon_anova,
+  plot = TRUE,
+  alpha = 0.05,
+  correction = "Bonferroni"
+)
+
+cartoon_supernova
+
+```
+
+```{r}
+# Workflow: ANOVA using Permutation Tests
+# Observed F statistic
+observed_infer <- cartoon_modified %>%
+  specify(Rating ~ Cartoon) %>%
+  hypothesise(null = "independence") %>%
+  calculate(stat = "F")
+```
+
+
+```{r}
+# Null distribution using permutation tests
+null_dist_infer <- cartoon_modified %>%
+  specify(Rating ~ Cartoon) %>%
+  hypothesise(null = "independence") %>%
+  generate(reps = 4999, type = "permute") %>%
+  calculate(stat = "F")
+
+```
+
+```{r}
+# Visualizing null distribution
+null_dist_infer %>%
+  visualise(method = "simulation") +
+  shade_p_value(obs_stat = observed_infer$stat, direction = "right") +
+  scale_x_continuous(trans = "log10", expand = c(0, 0)) +
+  coord_cartesian(xlim = c(0.2, 500), clip = "off") +
+  annotation_logticks(outside = FALSE) +
+  theme_classic()
+```
+
+
+
+
+
 <https://av-quarto.netlify.app/content/courses/analytics/inference/modules/130-threemeansormore/>

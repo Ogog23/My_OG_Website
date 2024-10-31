@@ -3,3 +3,22 @@ title: "A3 - Art And Design Dataset"
 author: "Gayatri Jadhav"
 prof: "Arvind Venkatadri"
 ---
+
+```{r}
+#| label: setup
+library(tidyverse) # Tidy data processing
+library(ggformula) # Formula based plots
+library(mosaic) # Data inspection and Statistical Inference
+library(broom) # Tidy outputs from Statistical Analyses
+library(infer) # Statistical Inference, Permutation/Bootstrap
+library(patchwork) # Arranging Plots
+library(ggprism) # Interesting Categorical Axes
+library(supernova) # Beginner-Friendly ANOVA Tables
+```
+
+```{r}
+# Reading in the data
+artanddesign <- read_csv("../../Data/art_and_design.csv")
+
+glimpse(artanddesign)
+```
