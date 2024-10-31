@@ -4,6 +4,10 @@ author: "Gayatri Jadhav"
 prof: "Arvind Venkatadri"
 ---
 
+## Introduction
+
+This dataset shows ratings given by MAHE students to different cartoons. Each entry includes a Participant ID, Gender, Cartoon name, and Rating. The aim is to see if there are significant differences in how people rate each cartoon. By using ANOVA, we can find out if some cartoon is consistently rated higher or lower than the other.
+
 ```{r}
 #| label: setup
 library(tidyverse) # Tidy data processing
@@ -17,6 +21,7 @@ library(supernova) # Beginner-Friendly ANOVA Tables
 ```
 
 ```{r}
+# Reading in the data
 cartoon <- read_csv("../../Data/Cartoon.csv")
 
 glimpse(cartoon)
@@ -24,6 +29,8 @@ glimpse(cartoon)
 ```
 
 ```{r}
+# Mutating by converting Gender and Cartoon into factors
+
 cartoon_modified <- cartoon %>%
   dplyr::mutate(
   Gender = as_factor(Gender),
@@ -54,6 +61,27 @@ gf_histogram(~Rating,
 ```{r}
 # Set graph theme
 theme_set(new = theme_classic())
+
+# Creating faceted histograms with black outline, and overall mean line
+gf_histogram(~Rating,
+  data = cartoon_modified, alpha = 0.7, bins = 10,
+  fill = ~Cartoon, color = "black"  # Black outline
+) %>%
+  gf_facet_wrap(~Cartoon) %>%  # Facet by cartoon
+  gf_vline(xintercept = mean(~Rating, data = cartoon_modified), linetype = "dashed") %>%
+  gf_labs(
+    title = "Histograms of Cartoon Ratings Distributions by Cartoon",
+    x = "Rating", y = "Count"
+  ) 
+```
+
+::: callout-note
+I tried facetting by cartoon, this way each cartoon’s rating distribution can be observed independently, making it easier to spot whether the cartoon has ratings clustered around high or low values. It also easy to compare how each cartoon's ratings match up with the overall mean.
+:::
+
+```{r}
+# Set graph theme
+theme_set(new = theme_classic())
 ##
 gf_boxplot(
   data = cartoon_modified,
@@ -73,4 +101,4 @@ gf_boxplot(
   )
 ```
 
-https://av-quarto.netlify.app/content/courses/analytics/inference/modules/130-threemeansormore/
+<https://av-quarto.netlify.app/content/courses/analytics/inference/modules/130-threemeansormore/>
