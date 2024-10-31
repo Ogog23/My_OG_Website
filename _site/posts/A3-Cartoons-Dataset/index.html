@@ -550,7 +550,7 @@ W = 0.93926, p-value = 0.0003856</code></pre>
 2 Doraemon         5.25
 3 Dragon Tales     3.84</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Levene's test for homogeneity of variances</span></span>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Levene's test </span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">LeveneTest</span>(Rating <span class="sc">~</span> Cartoon, <span class="at">data =</span> cartoon_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Levene's Test for Homogeneity of Variance (center = median)
@@ -558,7 +558,7 @@ W = 0.93926, p-value = 0.0003856</code></pre>
 group  2  1.2923 0.2798
       87               </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fligner-Killeen test for homogeneity of variances</span></span>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fligner-Killeen test</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fligner.test</span>(Rating <span class="sc">~</span> Cartoon, <span class="at">data =</span> cartoon_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -607,6 +607,19 @@ Fligner-Killeen:med chi-squared = 1.8135, df = 2, p-value = 0.4038</code></pre>
 1 Doraemon     Chota Bheem 0.580     0.354 1.636    87 -0.186 1.346  .3161
 2 Dragon Tales Chota Bheem 0.597     0.354 1.683    87 -0.170 1.363  .2877
 3 Dragon Tales Doraemon    0.017     0.354 0.047    87 -0.750 0.783 1.0000</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cartoons (like Chota Bheem) are rated consistently higher than others (like Doraemon). Students have a preference for Chota Bheem over the other cartoons, while Doraemon is rated lower in comparison.</p>
 </div>
 </div>
 <div class="cell">

@@ -101,13 +101,11 @@ gf_boxplot(
   )
 ```
 
-
 ```{r}
 # Perform ANOVA
 cartoon_anova <- aov(Rating ~ Cartoon, data = cartoon_modified)
 
 ```
-
 
 ```{r}
 supernova::pairwise(cartoon_anova,
@@ -127,6 +125,7 @@ supernova::equation(cartoon_anova)
 #Shapiro-Wilk test for normality on residuals
 shapiro.test(x = cartoon_anova$residuals)
 ```
+
 ```{r}
 # Shapiro-Wilk test for normality grouped by Cartoon
 cartoon_modified %>%
@@ -138,7 +137,6 @@ cartoon_modified %>%
     broom::tidy()
   )
 ```
-
 
 ```{r}
 #Residuals histogram and QQ plot
@@ -167,13 +165,12 @@ cartoon_modified %>%
   group_by(Cartoon) %>%
   summarise(variance = var(Rating))
 
-# Levene's test for homogeneity of variances
+# Levene's test 
 DescTools::LeveneTest(Rating ~ Cartoon, data = cartoon_modified)
 
-# Fligner-Killeen test for homogeneity of variances
+# Fligner-Killeen test
 fligner.test(Rating ~ Cartoon, data = cartoon_modified)
 ```
-
 
 ```{r}
 
@@ -188,6 +185,10 @@ cartoon_supernova
 
 ```
 
+::: callout-note
+Cartoons (like Chota Bheem) are rated consistently higher than others (like Doraemon). Students have a preference for Chota Bheem over the other cartoons, while Doraemon is rated lower in comparison.
+:::
+
 ```{r}
 # Workflow: ANOVA using Permutation Tests
 # Observed F statistic
@@ -196,7 +197,6 @@ observed_infer <- cartoon_modified %>%
   hypothesise(null = "independence") %>%
   calculate(stat = "F")
 ```
-
 
 ```{r}
 # Null distribution using permutation tests
@@ -218,9 +218,5 @@ null_dist_infer %>%
   annotation_logticks(outside = FALSE) +
   theme_classic()
 ```
-
-
-
-
 
 <https://av-quarto.netlify.app/content/courses/analytics/inference/modules/130-threemeansormore/>
